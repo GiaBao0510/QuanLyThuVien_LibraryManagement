@@ -2,33 +2,33 @@ const { ObjectId } = require('mongodb');
 
 class ContactServiceDocGia{
     constructor(client){
-        this.Contact = client.db().collection('DocGia'); //Kết nối đến bảng nhân viên
+        this.Contact = client.db().collection('DocGia'); //Kết nối đến bảng đọc giả
     }
 
-    //Kiểm tra IDcó tồn tại hay chưa [Nhân viên]
+    //Kiểm tra IDcó tồn tại hay chưa [đọc giả]
     
-    //1.Lấy ID cuối cùng rồi tạo ra ID mới dựa trên ID gần nhất [Nhân viên]
+    //1.Lấy ID cuối cùng rồi tạo ra ID mới dựa trên ID gần nhất [đọc giả]
     async newID_DocGia(){
         /*
             Giải thích:
                 - find({},{id:1, _id:0}):
                     + tham số thứ 1 {}: là truy vấn tất cả document trong collection
-                    + tham số thứ 2 {id:1, _id:0}: id là chỉ hiển thị 1 thuộc tính id, _id:0 là không hiển thị thuộc tính _id
+                    + tham số thứ 2 {id:1, _id:0}: id là chỉ hiển thị 1 thuộc tính idDocGia, _id:0 là không hiển thị thuộc tính _id
                 - sort({id:-1}): với tham số {id:-1}. Có nghĩa là tìm từ dưới lên. Nếu là 1 thì ngược lại
                 - limit(1): hàm này dùng để giới hạn hiển thị dựa trên tham số.
         */
-        const response = await this.Contact.find({},{id:1,_id:0}).sort({id:-1}).limit(1);
+        const response = await this.Contact.find({},{idDocGia:1,_id:0}).sort({idDocGia:-1}).limit(1);
         while( await response.hasNext()){
             var result = await response.next();
         }
-        const kq = result.id + 1;
+        const kq = await result.id + 1;
         return kq; 
     }
 
-    //1.Thêm nhân viên. Khi Tạo thông tin nhân viên
+    //1.Thêm đọc giả. Khi Tạo thông tin đọc giả
     async themDocGia(payload){
         const contact = {
-            id: await this.newID_DocGia(),
+            idDocGia: await this.newID_DocGia(),
             hoTen: payload.hoTen,
             gioiTinh: payload.gioiTinh,
             ngaySinh: payload.ngaySinh,
@@ -40,40 +40,48 @@ class ContactServiceDocGia{
             contact,
             {returnDocument: "after", upsert: true}
         );
-        return result.value;
+        return await result.value;
     }
 
-    //2.Tìm thông tin nhân viên dựa trên ID
+    //2.Tìm thông tin đọc giả dựa trên ID
     async TimThongTinDocGia(ID){
-        const result = await this.Contact.findOne({id:ID});
+        const result = await this.Contact.findOne({idDocGia:ID});
         return result;
     }
 
-    //3. Xóa thông tin nhân viên dựa trên ID
+    //3. Xóa thông tin đọc giả dựa trên ID
     async XoaDocGiaID(ID){
-        return await this.Contact.deleteOne({id:ID});
+        return await this.Contact.deleteOne({idDocGia:ID});
     }
 
-    //4. Cập nhật thông tin nhân viên dựa trên ID
+    //4. Cập nhật thông tin đọc giả dựa trên ID
     async CapNhatThongTin(ID, DauVao){
         const response = await this.Contact.findOneAndUpdate(
-            {id:ID},
+            {idDocGia:ID},
             {$set: DauVao},
             {returnDocument: "after"}
         );
         return response;
     }
 
-    //5. Danh sách nhân viên
+    //5. Danh sách đọc giả
     async DanhSachDocGia(){
         const response = await this.Contact.find({});
         const result = await response.toArray();
         return result;
     }
 
-    //6. Xóa tất cả nhân viên
+    //6. Xóa tất cả đọc giả
     async XoaHetDocGia(){
         const result = await this.Contact.deleteMany({});
         return result.deletedCount;
     }
+
+    //7.Tìm thông tin đọc giả dựa trên name
+    async TimThongTinHoTenDocGia(name){
+        const result = await this.Contact.findOne({hoTen:name});
+        return result;
+    }
 }
+
+module.exports = ContactServiceDocGia;

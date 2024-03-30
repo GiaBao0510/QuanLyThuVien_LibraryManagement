@@ -28,7 +28,7 @@ class ContactServiceSach{
     //1.Thêm nhân viên. Khi Tạo thông tin nhân viên
     async themSach(payload){
         const contact = {
-            id: await this.newID_Sach(),
+            idSach: await this.newID_Sach(),
             tenSach: payload.tenSach,
             MoTa: payload.MoTa,
             TieuDe: payload.TieuDe,
@@ -44,19 +44,19 @@ class ContactServiceSach{
 
     //2.Tìm thông tin nhân viên dựa trên ID
     async TimThongTinSach(ID){
-        const result = await this.Contact.findOne({id:ID});
+        const result = await this.Contact.findOne({idSach:ID});
         return result;
     }
 
     //3. Xóa thông tin nhân viên dựa trên ID
     async XoaSachID(ID){
-        return await this.Contact.deleteOne({id:ID});
+        return await this.Contact.deleteOne({idSach:ID});
     }
 
     //4. Cập nhật thông tin nhân viên dựa trên ID
     async CapNhatThongTin(ID, DauVao){
         const response = await this.Contact.findOneAndUpdate(
-            {id:ID},
+            {idSach:ID},
             {$set: DauVao},
             {returnDocument: "after"}
         );
@@ -75,4 +75,48 @@ class ContactServiceSach{
         const result = await this.Contact.deleteMany({});
         return result.deletedCount;
     }
+
+    //7. Tìm sách dựa trên tên sách
+    async TimTenSach(TenSach){
+        return await this.Contact.findOne({tenSach:TenSach});
+    }
+
+    //8. Lấy tổng số lượng sách dựa trên ID sách
+    async TongSoLuongSach_ID(id){
+        const JoinData = await collection.aggregate([
+            {
+                $lookup: {
+                    from: "ChiTietSach",
+                    localField: "idSach",
+                    foreignField: "idSach",
+                    as: "KetQua",
+                },
+            },
+            {
+                $unwind: "$KetQua",
+            },
+            {
+                $match: {
+                    "KetQua.idSach": id,
+                }
+            },
+            {
+                $project:{
+                    tenSach: 1, // Chỉ cần ghi tên trường
+                    Ban: "$KetQua.Ban",
+                    _id: 0
+                }
+            }  
+           
+        ]).toArray();
+    
+        return JoinData.length;
+    }
+    
+
+    //8. Lấy tổng số lượng sách dựa trên Tên sách
+    //9. Lấy tổng sơ lượng sách dựa trên ID tình trạng
+    //9. Lấy tổng sơ lượng sách dựa trên Tên tình trạng
 }
+
+module.exports = ContactServiceSach;

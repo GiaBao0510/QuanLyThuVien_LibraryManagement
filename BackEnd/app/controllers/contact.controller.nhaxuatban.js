@@ -3,7 +3,7 @@ const ApiError = require('../api-error');
 const ContactServiceNhaXuatban = require('../services/contact.service.nhaxuatban');
 const MongoDB = require('../utils/mongoDB.util');
 
-    //Xử lý yêu cầu HTTP POST
+    //Xử lý yêu cầu HTTP POST 
 //1. Thêm nhà xuất bản
 exports.addPublishingCompany= async(req, res, next) =>{
     //Kiểm tra xem thuộc tính hoTen từ phía máy khách gửi lên có rỗng hay không. Nếu rỗng thì báo lỗi từ phía khách
@@ -44,6 +44,21 @@ exports.PublishingCompanyIdentity = async(req, res, next) =>{
         return res.send(document);
     }catch(error){
         return next(new ApiError(500, "Loi .Khi tim ID nha xuat ban"));
+    }
+};
+
+//3. Lấy thông tin nhà xuất bản trên tên nhà xuất bản
+exports.PublishingCompanyName = async(req, res, next) =>{
+    try{
+        const CSNhaXuatban = new ContactServiceNhaXuatban(MongoDB.client);
+        const document = await CSNhaXuatban.TimTenNhaXuatban(req.params.name);
+        //Nếu ID không tồn tại
+        if(!document){
+            return next(new ApiError(400,"Ten nha xuat ban khong ton tai"));
+        }
+        return res.send(document);
+    }catch(error){
+        return next(new ApiError(500, "Loi .Khi tim ten nha xuat ban"));
     }
 };
 

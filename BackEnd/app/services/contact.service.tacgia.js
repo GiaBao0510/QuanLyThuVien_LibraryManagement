@@ -28,7 +28,7 @@ class ContactServiceTacGia{
     //1.Thêm nhân viên. Khi Tạo thông tin nhân viên
     async themTacGia(payload){
         const contact = {
-            id: await this.newID_TacGia(),
+            idTacGia: await this.newID_TacGia(),
             hoTen: payload.hoTen,
             gioiTinh: payload.gioiTinh,
             ngaySinh: payload.ngaySinh,
@@ -43,19 +43,19 @@ class ContactServiceTacGia{
 
     //2.Tìm thông tin nhân viên dựa trên ID
     async TimThongTinTacGia(ID){
-        const result = await this.Contact.findOne({id:ID});
+        const result = await this.Contact.findOne({idTacGia:ID});
         return result;
     }
 
     //3. Xóa thông tin nhân viên dựa trên ID
     async XoaTacGiaID(ID){
-        return await this.Contact.deleteOne({id:ID});
+        return await this.Contact.deleteOne({idTacGia:ID});
     }
 
     //4. Cập nhật thông tin nhân viên dựa trên ID
     async CapNhatThongTin(ID, DauVao){
         const response = await this.Contact.findOneAndUpdate(
-            {id:ID},
+            {idTacGia:ID},
             {$set: DauVao},
             {returnDocument: "after"}
         );
@@ -74,4 +74,10 @@ class ContactServiceTacGia{
         const result = await this.Contact.deleteMany({});
         return result.deletedCount;
     }
+
+    //7. Tìm tác giả thông qua tên
+    async TimTenTacGia(Name){
+        return await this.Contact.findOne({hoTen:Name}); 
+    }
 }
+module.exports = ContactServiceTacGia;

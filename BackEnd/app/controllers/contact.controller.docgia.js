@@ -47,6 +47,20 @@ exports.readerIdentity = async(req, res, next) =>{
     }
 };
 
+//3. Lấy thông tin đọc giả bằng tên
+exports.readerName = async(req, res, next) =>{
+    try{
+        const CSDocGia = new ContactServiceDocGia(MongoDB.client);
+        const document = await CSDocGia.TimThongTinHoTenDocGia(req.params.name);
+        //Nếu ID không tồn tại
+        if(!document){
+            return next(new ApiError(400,"Ho ten doc gia khong ton tai"));
+        }
+        return res.send(document);
+    }catch(error){
+        return next(new ApiError(500, "Loi .Khi tim ho ten doc gia"));
+    }
+};
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin đọc giả dựa trên ID
 exports.updateReaderInformation = async(req, res, next) => {

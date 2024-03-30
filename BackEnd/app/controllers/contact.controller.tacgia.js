@@ -47,6 +47,20 @@ exports.AuthorIdentity = async(req, res, next) =>{
     }
 };
 
+//3. Lấy thông tin tác giả trên tên tác giả
+exports.AuthorName = async(req, res, next) =>{
+    try{
+        const CSTacGia = new ContactServiceTacGia(MongoDB.client);
+        const document = await CSTacGia.TimTenTacGia(req.params.name);
+        //Nếu ten không tồn tại
+        if(!document){
+            return next(new ApiError(400,"Ten tac gia khong ton tai"));
+        }
+        return res.send(document);
+    }catch(error){
+        return next(new ApiError(500, "Loi .Khi tim ID tac gia"));
+    }
+};
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin tác giả dựa trên ID
 exports.updateAuthorInformation = async(req, res, next) => {

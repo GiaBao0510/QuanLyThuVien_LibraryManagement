@@ -29,7 +29,7 @@ class ContactServiceNhaXuatban{
     //1.Thêm nhà xuất bản. Khi Tạo thông tin nhà xuất bản
     async themNhaXuatban(payload){
         const contact = {
-            id: await this.newID_NhaXuatban(),
+            idNXB: await this.newID_NhaXuatban(),
             tenNXB: payload.tenNXB,
             SDT: payload.SDT,
             Email: payload.Email,
@@ -44,19 +44,19 @@ class ContactServiceNhaXuatban{
 
     //2.Tìm thông tin nhà xuất bản dựa trên ID
     async TimThongTinNhaXuatban(ID){
-        const result = await this.Contact.findOne({id:ID});
+        const result = await this.Contact.findOne({idNXB:ID});
         return result;
     }
 
     //3. Xóa thông tin nhà xuất bản dựa trên ID
     async XoaNhaXuatbanID(ID){
-        return await this.Contact.deleteOne({id:ID});
+        return await this.Contact.deleteOne({idNXB:ID});
     }
 
     //4. Cập nhật thông tin nhà xuất bản dựa trên ID
     async CapNhatThongTin(ID, DauVao){
         const response = await this.Contact.findOneAndUpdate(
-            {id:ID},
+            {idNXB:ID},
             {$set: DauVao},
             {returnDocument: "after"}
         );
@@ -73,4 +73,11 @@ class ContactServiceNhaXuatban{
         const result = await this.Contact.deleteMany({});
         return result.deletedCount;
     }
+
+    //7. Tìm tên nhà xuất bản
+    async TimTenNhaXuatban(TenNXB){
+        return await this.Contact.findOne({tenNXB:TenNXB});
+    }
 }
+
+module.exports = ContactServiceNhaXuatban;

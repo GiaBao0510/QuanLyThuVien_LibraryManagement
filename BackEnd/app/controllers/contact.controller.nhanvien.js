@@ -47,6 +47,21 @@ exports.employeeIdentity = async(req, res, next) =>{
     }
 };
 
+//3. Lấy thông tin nhân viên dựa trên họ tên
+exports.employeeName = async(req, res, next) =>{
+    try{
+        const CSnhanvien = new ContactServiceNhanVien(MongoDB.client);
+        const document = await CSnhanvien.TimThongTinHoTenNhanVien(req.params.name);
+        //Nếu ID không tồn tại
+        if(!document){
+            return next(new ApiError(400,"Ho ten nhan vien khong ton tai"));
+        }
+        return res.send(document);
+    }catch(error){
+        return next(new ApiError(500, "Loi .Khi tim ho ten nhan vien"));
+    }
+};
+
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin nhân viên dựa trên ID
 exports.updateEmployeeInformation = async(req, res, next) => {

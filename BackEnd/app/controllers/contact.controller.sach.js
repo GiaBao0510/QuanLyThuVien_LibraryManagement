@@ -47,6 +47,36 @@ exports.BookIdentity = async(req, res, next) =>{
     }
 };
 
+//3. Lấy thông tin sách trên tên sách
+exports.BookIdentity = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        const document = await CSSach.TimTenSach(req.params.id);
+        //Nếu ID không tồn tại
+        if(!document){
+            return next(new ApiError(400,"ID sach khong ton tai"));
+        }
+        return res.send(document);
+    }catch(error){
+        return next(new ApiError(500, "Loi .Khi tim ID sach"));
+    }
+};
+
+//2. Lấy thông tin sách trên ID
+exports.BookName = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        const document = await CSSach.TimThongTinSach(req.params.tensach);
+        //Nếu ID không tồn tại
+        if(!document){
+            return next(new ApiError(400,"ID sach khong ton tai"));
+        }
+        return res.send(document);
+    }catch(error){
+        return next(new ApiError(500, "Loi .Khi tim ID sach"));
+    }
+};
+
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin sách dựa trên ID
 exports.updateBookInformation = async(req, res, next) => {

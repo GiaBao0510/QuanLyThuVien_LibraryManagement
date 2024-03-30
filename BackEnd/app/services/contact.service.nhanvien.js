@@ -29,7 +29,7 @@ class ContactServiceNhanVien{
     //1.Thêm nhân viên. Khi Tạo thông tin nhân viên
     async themNhanVien(payload){
         const contact = {
-            id: await this.newID_nhanvien(),
+            idNhanVien: await this.newID_nhanvien(),
             hoTen: payload.hoTen,
             gioiTinh: payload.gioiTinh,
             ngaySinh: payload.ngaySinh,
@@ -46,19 +46,19 @@ class ContactServiceNhanVien{
 
     //2.Tìm thông tin nhân viên dựa trên ID
     async TimThongTinNhanVien(ID){
-        const result = await this.Contact.findOne({id:ID});
+        const result = await this.Contact.findOne({idNhanVien:ID});
         return result;
     }
 
     //3. Xóa thông tin nhân viên dựa trên ID
     async XoaNhanVienID(ID){
-        return await this.Contact.deleteOne({id:ID});
+        return await this.Contact.deleteOne({idNhanVien:ID});
     }
 
     //4. Cập nhật thông tin nhân viên dựa trên ID
     async CapNhatThongTin(ID, DauVao){
         const response = await this.Contact.findOneAndUpdate(
-            {id:ID},
+            {idNhanVien:ID},
             {$set: DauVao},
             {returnDocument: "after"}
         );
@@ -75,4 +75,12 @@ class ContactServiceNhanVien{
         const result = await this.Contact.deleteMany({});
         return result.deletedCount;
     }
+
+    //7. Tìm nhân viên thông qua tên
+    async TimThongTinHoTenNhanVien(name){
+        const result = await this.Contact.findOne({hoTen:name});
+        return result;
+    }
 }
+
+module.exports = ContactServiceNhanVien;
