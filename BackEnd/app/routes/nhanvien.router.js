@@ -13,50 +13,39 @@ router.route('/edit/nhanvien/:id')
 
     // --------- List ------------
 //Danh sách sách
-router.route('/books')
-    .get(sach.listBook);
+router.route('/books').get(sach.listBook);
 
 //Danh sách đọc giả
-router.route('/Readers')
-    .get(docgia.listReader);
+router.route('/Readers').get(docgia.listReader);
 
 //Danh sách tác giả
-router.route('/Authors')
-    .get(tacgia.listAuthor);
+router.route('/Authors').get(tacgia.listAuthor);
 
 //Danh sách nhà xuất bản
-router.route('/Publishers')
-    .get(nhaxuatban.listPublishingCompany);
+router.route('/Publishers').get(nhaxuatban.listPublishingCompany);
 
     // --------- ID ------------
 //Tìm ID sách
-router.route('/book/:id')
-    .get(sach.BookIdentity);
+router.route('/book/:id').get(sach.BookIdentity);
 
 //Tìm ID đọc giả
-router.route('/Reader/:id')
-    .get(docgia.readerIdentity);
+router.route('/Reader/:id').get(docgia.readerIdentity);
 
 //ID nhà xuất bản
-router.route('/Publisher/:id')
-    .get(nhaxuatban.PublishingCompanyIdentity);
+router.route('/Publisher/:id').get(nhaxuatban.PublishingCompanyIdentity);
 
     // --------- Name ------------
 //Tìm tên sách
-router.route('/book/:tensach')
-    .get(sach.BookName);
+router.route('/book/:tensach').get(sach.BookName);
 
 //Tìm tên tác giả
-router.route('/author/hoTen/:name')
-    .get(tacgia.AuthorName);
+router.route('/author/hoTen/:name').get(tacgia.AuthorName);
 
 //Tìm tên tác giả
-router.route('/author/:id')
-    .get(tacgia.AuthorIdentity);
+router.route('/author/:id').get(tacgia.AuthorIdentity);
 
 //Tên nhà xuất bản
-router.route('/Publisher/tenNXB/:name')
-    .get(nhaxuatban.PublishingCompanyName);
+router.route('/Publisher/tenNXB/:name').get(nhaxuatban.PublishingCompanyName);
 
 //Liệt kê đọc giả mượn sách quá hạn
 //Liệt kê đọc giả chưa trả sách

@@ -19,6 +19,23 @@ exports.addBook = async(req, res, next) =>{
     }
 };
 
+//2. Thêm số lượng sách dựa trên ID sách
+exports.addNumberOfBook = async (req, res, next) => {
+    let result;
+    try {
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        const num = parseInt(req.params.num);
+        const id = parseInt(req.params.id);
+        result = await CSSach.ThemSoLuongBanSach_ID(num, id);
+        if (result == true) {
+            return res.send({ message: "Đã thêm số lượng sách thành công" });
+        }
+        return res.send({ message: `Lỗi không tìm thấy ID sách: ${req.params.id}` });
+    } catch (error) {
+        return next(new ApiError(500, `Mot loi xuat hien khi dang them so luong cho quyen sach duoc chon. ${error.message} - ${result}`));
+    }
+};
+
     //Xử lý yêu cầu HTTP GET
 //1. Lấy danh sách sách
 exports.listBook = async(req, res, next) =>{
@@ -48,32 +65,42 @@ exports.BookIdentity = async(req, res, next) =>{
 };
 
 //3. Lấy thông tin sách trên tên sách
-exports.BookIdentity = async(req, res, next) =>{
-    try{
-        const CSSach = new ContactServiceSach(MongoDB.client);
-        const document = await CSSach.TimTenSach(req.params.id);
-        //Nếu ID không tồn tại
-        if(!document){
-            return next(new ApiError(400,"ID sach khong ton tai"));
-        }
-        return res.send(document);
-    }catch(error){
-        return next(new ApiError(500, "Loi .Khi tim ID sach"));
-    }
-};
-
-//2. Lấy thông tin sách trên ID
 exports.BookName = async(req, res, next) =>{
     try{
         const CSSach = new ContactServiceSach(MongoDB.client);
-        const document = await CSSach.TimThongTinSach(req.params.tensach);
+        const document = await CSSach.TimThongTinSach(req.params.name);
+        //Nếu ID không tồn tại
+        if(!document){
+            return next(new ApiError(400,"Name sach khong ton tai"));
+        }
+        return res.send(document);
+    }catch(error){
+        return next(new ApiError(500, "Loi .Khi tim Name sach"));
+    }
+};
+
+//5. Lấy Tổng số lượng sách dựa trên ID
+exports.TotalNumberOfBook = async(req, res, next) =>{
+    try{
+        const id = req.params.id;
+        //Kiểm tra ID có hợp lệ không
+        if(isNaN(id)){
+            return next(new ApiError(400,"ID khong hop le"));
+        }
+
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        const document = await CSSach.TongSoLuongSach_ID(req.params.id);
         //Nếu ID không tồn tại
         if(!document){
             return next(new ApiError(400,"ID sach khong ton tai"));
         }
-        return res.send(document);
+        if(document){
+            return res.json(document);
+        }else{
+            return res.sendStatus(404);
+        }
     }catch(error){
-        return next(new ApiError(500, "Loi .Khi tim ID sach"));
+        return next(new ApiError(500, `Loi .Khi tim ID sach: ${req.params.id} - ${error.message}`));
     }
 };
 
@@ -97,6 +124,38 @@ exports.updateBookInformation = async(req, res, next) => {
     }
 }
 
+//2. Cập nhật mượn sách
+exports.UpdateBororredBook = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        const document = await CSSach.CapNhatMuonSach(req.params.idreader, req.params.stt);
+        
+        if(document == false){
+            return next(new ApiError(400, `Khong tin thay STT ban sach hoac ID doc gia ${req.params.idreader} - ${req.params.stt}`));
+        }
+        
+        return res.send({message: "Muon sach thanh cong"});
+    }catch(error){
+        return next(new ApiError(500, `Loi. Khi dang thuc hien cho muon sach ${error.message}`));
+    }
+};
+
+//3. Cập nhật tình trạng sách
+exports.UpdateStateBook = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        const document = await CSSach.CapNhatTinhTrangSach(req.params.stt, req.body);
+        
+        if(document == false){
+            return next(new ApiError(400, `Khong tin thay STT ban sach - ${req.params.stt} - ${req.body}`));
+        }
+        
+        return res.send({message: "Cap nhat tinh trang sach thanh cong"});
+    }catch(error){
+        return next(new ApiError(500, `Loi. Khi dang thuc hien cho muon sach ${error.message}`));
+    }
+};
+
     //Xử lý yêu cầu HTTP DELETE
 //1. xóa thông tin sách dựa trên ID
 exports.deleteBook = async (req, res, next) => {
@@ -113,7 +172,7 @@ exports.deleteBook = async (req, res, next) => {
     }
 }
 
-//2. Xóa tất cả nhan viên
+//2. Xóa tất cả sách
 exports.deleteAllBook = async (req, res, next) => {
     try{
         const CSSach = new ContactServiceSach(MongoDB.client);
@@ -123,3 +182,4 @@ exports.deleteAllBook = async (req, res, next) => {
         return next(new ApiError(500, 'Loi. Khi dang xoa tat ca sach'));
     }
 }
+

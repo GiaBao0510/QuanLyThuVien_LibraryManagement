@@ -13,7 +13,7 @@ exports.addPublishingCompany= async(req, res, next) =>{
     try{
         const CSNhaXuatban = new ContactServiceNhaXuatban(MongoDB.client);
         const document = await CSNhaXuatban.themNhaXuatban(req.body);
-        return res.send(document);  //Trả về thông tin từ phía máy khách đã gửi
+        return res.send({message: "Đã thêm nhà xuất bản thành công"});  //Trả về thông tin từ phía máy khách đã gửi
     }catch(error){
         return next( new ApiError(500, "Mot loi xuat hien khi dang them thong tin nha xuat ban") );
     }
@@ -23,7 +23,7 @@ exports.addPublishingCompany= async(req, res, next) =>{
 //1. Lấy danh sách nhà xuất bản
 exports.listPublishingCompany= async(req, res, next) =>{
     let documents = [];
-    try{
+    try{ 
         const CSNhaXuatban = new ContactServiceNhaXuatban(MongoDB.client);
         documents = await CSNhaXuatban.DanhSachNhaXuatban();
     }catch(error){

@@ -7,4 +7,4 @@ const config = {
     }
 };
 
-module = config; //Xuất đối tượng vào module
+module.exports = config; //Xuất đối tượng vào module

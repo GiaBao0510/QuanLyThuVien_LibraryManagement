@@ -26,10 +26,14 @@ exports.listReader = async(req, res, next) =>{
     try{
         const CSDocGia = new ContactServiceDocGia(MongoDB.client);
         documents = await CSDocGia.DanhSachDocGia();
+        if( documents.length < 1){
+            return next(new ApiError( 500, "Danh sach nha xuat ban rong."));
+        }
     }catch(error){
         return next(new ApiError( 500, "Co mot loi xuat hien .Khi nhan mot danh sach doc gia."));
     }
     return res.send(documents);
+    
 };
 
 //2. Lấy thông tin đọc giả trên ID
@@ -39,7 +43,7 @@ exports.readerIdentity = async(req, res, next) =>{
         const document = await CSDocGia.TimThongTinDocGia(req.params.id);
         //Nếu ID không tồn tại
         if(!document){
-            return next(new ApiError(400,"ID doc gia khong ton tai"));
+            return next(new ApiError(400,`ID doc gia số ${req.params.id} khong ton tai`));
         }
         return res.send(document);
     }catch(error){
@@ -73,7 +77,7 @@ exports.updateReaderInformation = async(req, res, next) => {
         const document = await CSDocGia.CapNhatThongTin(req.params.id, req.body);
         //Nếu ID không tồn tại thì báo lỗi
         if(!document){
-            return next(new ApiError(400, 'Khong tin thay ID doc gia'));
+            return next(new ApiError(400, `Khong tin thay ID doc gia ${req.params.id}`));
         }
         return res.send({message: "Thong tin doc gia da cap nhat thanh cong"})
     }catch(error){
@@ -91,7 +95,7 @@ exports.deleteReader = async (req, res, next) => {
         if(!document){
             return next(new ApiError(400, 'Khong tin thay ID doc gia'));
         }
-        return res.send({message: `Da xoa doc gia thanh cong`})
+        return res.send({message:`Da xoa doc gia thanh cong co ID: ${req.params.id} - ${document}`});
     }catch(error){
         return next(new ApiError(500, 'Loi. Khi dang xoa thong tin doc gia'));
     }
