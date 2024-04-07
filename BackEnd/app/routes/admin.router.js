@@ -104,7 +104,12 @@ router.route('/deleteAllAuthor').delete(tacgia.deleteAllAuthor);
     // ---- Truy vấn (admin , nhân viên)  ----
 //1. Tổng số lượng sách dựa trên ID sach
 router.route('/NumberOfBooks/:id').get(sach.TotalNumberOfBook);
+
+//2. Cập nhật theo dõi sách dựa trên STT bản
 router.route('/updatestatebook/:stt').put(sach.UpdateStateBook);
+
+//3. Lấy số lượng bản sách dựa trên tình trạng
+router.route("/numberofbookstates/:stt").get(sach.CountTheNumberOfBookStates)
 
     // ---- Truy vấn (admin)  ----
 //1. Thêm số lượng sách dựa trên ID sách

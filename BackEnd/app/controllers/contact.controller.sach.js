@@ -104,6 +104,25 @@ exports.TotalNumberOfBook = async(req, res, next) =>{
     }
 };
 
+//6. Lấy số lượng bản sách dựa trên tình trạng
+exports.CountTheNumberOfBookStates = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        const document = await CSSach.DemSoLuongSachDuaTrenTinhTrang(req.params.stt);
+        if(!document || document == false){
+            return next(new ApiError(400,"STT ban sach khong ton tai"));
+        }
+
+        if(document){
+            return res.json(document);
+        }else{
+            return res.sendStatus(404);
+        }
+    }catch(error){
+        return next(new ApiError(500, `Loi .Khi tim STT ban sach: ${req.params.stt} - ${error.message}`));
+    }
+}
+
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin sách dựa trên ID
 exports.updateBookInformation = async(req, res, next) => {

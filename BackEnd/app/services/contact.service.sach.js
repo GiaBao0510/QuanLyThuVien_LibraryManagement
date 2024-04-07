@@ -6,6 +6,7 @@ class ContactServiceSach{
         this.ChiTietSach = client.db().collection('ChiTietSach'); // Khai báo ChiTietSach là thuộc tính của class
         this.TheoDoiMuonSach = client.db().collection('TheoDoiMuonSach');
         this.DocGia = client.db().collection('DocGia');
+        this.TinhTrang = client.db().collection('TinhTrang');
     }
 
     //Kiểm tra IDcó tồn tại hay chưa [Nhân viên]
@@ -208,6 +209,20 @@ class ContactServiceSach{
             {returnDocument: "after"}
         );
         return true;
+    };
+
+    //12. Lấy số lượng sách dựa trên Tình trạng
+    async DemSoLuongSachDuaTrenTinhTrang(STT){
+        STT = parseInt(STT);
+        //ĐK: Tìm tình trạng này có tồn tại không
+        let timTinhTrang = await this.TinhTrang.findOne({STT: STT});
+        if(!timTinhTrang){
+            return false;
+        }
+
+        let response = await this.TheoDoiMuonSach.find({STT: STT});
+        response = await response.toArray();
+        return response.length;
     }
 
     //8. Lấy tổng số lượng sách dựa trên Tên sách
