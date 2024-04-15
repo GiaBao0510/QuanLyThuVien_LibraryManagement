@@ -62,6 +62,16 @@ exports.PublishingCompanyName = async(req, res, next) =>{
     }
 };
 
+//4. Tổng số nhà xuất bản
+exports.NumberOfpublishers = async(req, res, next) =>{
+    try{
+        const CSNhaXuatban = new ContactServiceNhaXuatban(MongoDB.client);
+        const soLuong = await CSNhaXuatban.SoLuongNhaXuatBan();
+        return res.json(soLuong);
+    }catch(error){
+        return next(new ApiError( 500, "Loi lay so luong nha xuat ban"));
+    }
+}
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin nhà xuất bản dựa trên ID
 exports.updatePublishingCompanyInformation = async(req, res, next) => {

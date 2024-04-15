@@ -64,5 +64,12 @@ class ContactServiceTacGia{
     async TimTenTacGia(Name){
         return await this.Contact.findOne({hoTen:Name}); 
     }
+
+    //8. Lấy số lượng tác giả
+    async TongSoLuongTacgia(){
+        let getSoluong = await this.Contact.find({});
+        getSoluong = await getSoluong.toArray();
+        return getSoluong.length;
+    }
 }
 module.exports = ContactServiceTacGia;

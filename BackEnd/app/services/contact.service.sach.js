@@ -104,19 +104,41 @@ class ContactServiceSach{
     };
 
     //9. Cập nhật tình trạng mượn sách
-    async CapNhatMuonSach( IDdocgia, Ban){
+    async CapNhatMuonSach( IDdocgia, IDSach){
+
         //Chuyển đổi về dạng số nguyên
         IDdocgia = parseInt(IDdocgia);
-        Ban = parseInt(Ban);
+        IDSach = parseInt(IDSach);
 
         //ĐK: Tìm xem đọc giả và bản sách mượn có tồn tại không
         let timDocGia = await this.DocGia.findOne({idDocGia: IDdocgia});
-        let timBanSach = await this.ChiTietSach.findOne({Ban: Ban});
+        let timSach = await this.Contact.findOne({idSach: IDSach});
         
-        if(!timDocGia|| !timBanSach){
+        if(!timDocGia|| !timSach){
             return false;
         }
 
+        //1.Lấy Bản sách dựa trên sách xem có người mượn hay không
+            //1.1Tìm bản sách dựa trên IDsach trong bảng ChiTietSach
+        let timBanSach = await this.ChiTietSach.find({idSach: IDSach}, {_id:0, Ban:1, idSach:0} ).toArray();
+        timBanSach = await timBanSach.map(item => item.Ban);
+
+        let BanChuaMuon = -1;
+        for (let i =0; i < timBanSach.length; i++){
+            //TÌm kiếm só thứ tự sách chưa mượn đầu tiên
+            const timBanChuaMuon = await this.TheoDoiMuonSach.findOne({Ban:timBanSach[i], STT:0});
+            if(timBanChuaMuon != null){
+                BanChuaMuon = parseInt(timBanSach[i]);
+                break;
+            }
+        }
+
+            //1.2Nếu không tìm thấy
+        if(BanChuaMuon < 0){
+            return -1;
+        }
+
+        //2.Định dạng ngày
         let today = new Date();
         let limitDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7);
         let currentDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -132,7 +154,7 @@ class ContactServiceSach{
             ngayTra: limitDay
         };
         await this.TheoDoiMuonSach.findOneAndUpdate(
-            {Ban: Ban},
+            {Ban: BanChuaMuon},
             {$set:input},
             {returnDocument: "after"}
         ).value;
@@ -198,10 +220,13 @@ class ContactServiceSach{
             return false;
         }
 
-        //ĐK đầu vào
+        //ĐK1: Kiểm tra bản sách đã tồn tại hay chưa
         if(!input || Object.keys(input).length === 0){
             return false;
         }
+
+        //DDk: Kiểm tra bản sách đó có người mượn hay chưa
+        let kiemTraMuonBanSach = await this
 
         const response = await this.TheoDoiMuonSach.findOneAndUpdate(
             {Ban: Ban },
@@ -223,6 +248,74 @@ class ContactServiceSach{
         let response = await this.TheoDoiMuonSach.find({STT: STT});
         response = await response.toArray();
         return response.length;
+    }
+
+    //13. Liệt kê thông tin những quyển sách đã mượn và thông tin người mượn
+    async LietKeThongTinSachDaMuon(){
+        let Ifor = await this.TheoDoiMuonSach.aggregate([
+            {
+                $lookup:{
+                    from: "DocGia",
+                    localField: "idDocGia",
+                    foreignField: "idDocGia",
+                    as:"TheoDoiDocGia",
+                }
+            },
+            {
+                $unwind: "$TheoDoiDocGia",
+            },
+            {
+                $lookup:{
+                    from:"ChiTietSach",
+                    localField: "Ban",
+                    foreignField: "Ban",
+                    as:"TheoDoiChiTietSach",
+                }
+            },
+            {
+                $unwind:"$TheoDoiChiTietSach",
+            },
+            {
+                $lookup:{
+                    from: "Sach",
+                    localField: "TheoDoiChiTietSach.idSach",
+                    foreignField: "idSach",
+                    as:"TheoDoiSach",
+                }
+            },
+            {
+                $unwind:"$TheoDoiSach",
+            },
+            {
+                $project:{
+                    Sach: "$TheoDoiSach.tenSach",
+                    Ban: "$TheoDoiChiTietSach.Ban",
+                    hoTen: "$TheoDoiDocGia.hoTen",
+                    idDocGia: "$TheoDoiDocGia.idDocGia",
+                    idSach: "$TheoDoiSach.idSach",
+                    ngayMuon: "$TheoDoiSach.ngayMuon",
+                    ngayTra: "$TheoDoiSach.ngayTra",
+                    _id:0
+                }
+            }
+    
+        ]).toArray();
+        
+        return Ifor;
+    }
+
+    //14. Số lượng sách
+    async SoLuongSach(){
+        let laySoluong = await this.Contact.find({});
+        laySoluong = await laySoluong.toArray();
+        return laySoluong.length;
+    }
+
+    //15. Tổng Số lượng sách trong thư viện
+    async ToanBoSoLuongSachTrongThuVien(){
+        let getSoluong = await this.ChiTietSach.find({});
+        getSoluong = await getSoluong.toArray();
+        return getSoluong.length;
     }
 
     //8. Lấy tổng số lượng sách dựa trên Tên sách

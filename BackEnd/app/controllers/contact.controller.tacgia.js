@@ -61,6 +61,18 @@ exports.AuthorName = async(req, res, next) =>{
         return next(new ApiError(500, "Loi .Khi tim ID tac gia"));
     }
 };
+
+//4. Lấy tổng số lượng tác giả
+exports.NumberOfAuthors = async(req, res, next) =>{
+    try{
+        const CSTacGia = new ContactServiceTacGia(MongoDB.client);
+        const soLuong = await CSTacGia.TongSoLuongTacgia();
+        return res.json(soLuong);
+    }catch(error){
+        return next(new ApiError( 500, "Loi lay so luong tác gia"));
+    }
+}
+
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin tác giả dựa trên ID
 exports.updateAuthorInformation = async(req, res, next) => {

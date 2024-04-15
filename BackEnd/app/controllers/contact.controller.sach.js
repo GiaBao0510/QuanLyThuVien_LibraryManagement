@@ -123,6 +123,40 @@ exports.CountTheNumberOfBookStates = async(req, res, next) =>{
     }
 }
 
+//7. Lấy thông tin sách đã mượn
+exports.ListInformationAboutBorrowedBooks = async(req, res, next) =>{
+    let documents=[];
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        documents = await CSSach.LietKeThongTinSachDaMuon();
+    }catch(error){
+        return next(new ApiError( 500, "Co mot loi xuat hien .Khi liet ke thong tin sach da muon."));
+    }
+    return res.send(documents);
+}
+
+//8. Tổng số sách
+exports.NumberOfBook = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        const soLuong = await CSSach.SoLuongSach();
+        return res.json(soLuong);
+    }catch(error){
+        return next(new ApiError( 500, "Loi lay so luong sach"));
+    }
+}
+
+//9. Tổng số lượng sách trong thư viện
+exports.TheEntireNumberOfBooksInTheLibrary = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        const soLuong = await CSSach.ToanBoSoLuongSachTrongThuVien();
+        return res.json(soLuong);
+    }catch(error){
+        return next(new ApiError( 500, "Loi lay so luong sach trong thu vien"));
+    }
+}
+
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin sách dựa trên ID
 exports.updateBookInformation = async(req, res, next) => {
@@ -147,13 +181,17 @@ exports.updateBookInformation = async(req, res, next) => {
 exports.UpdateBororredBook = async(req, res, next) =>{
     try{
         const CSSach = new ContactServiceSach(MongoDB.client);
-        const document = await CSSach.CapNhatMuonSach(req.params.idreader, req.params.stt);
+        const document = await CSSach.CapNhatMuonSach(req.params.idreader, req.params.idsach);
         
         if(document == false){
             return next(new ApiError(400, `Khong tin thay STT ban sach hoac ID doc gia ${req.params.idreader} - ${req.params.stt}`));
         }
         
-        return res.send({message: "Muon sach thanh cong"});
+        if(document == -1){
+            return next(new ApiError(400, `Quyen nay da co nguoi muon`));
+        }
+
+        return res.send({message: `Muon sach thanh cong - ${document}`});
     }catch(error){
         return next(new ApiError(500, `Loi. Khi dang thuc hien cho muon sach ${error.message}`));
     }

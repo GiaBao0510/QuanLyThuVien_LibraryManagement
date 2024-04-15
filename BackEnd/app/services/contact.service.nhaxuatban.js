@@ -66,6 +66,13 @@ class ContactServiceNhaXuatban{
     async TimTenNhaXuatban(TenNXB){
         return await this.Contact.findOne({tenNXB:TenNXB});
     }
+
+    //8. Số lượng nhà xuất bản
+    async SoLuongNhaXuatBan(){
+        let getSoluong = await this.Contact.find({});
+        getSoluong = await getSoluong.toArray();
+        return getSoluong.length;
+    }
 }
 
 module.exports = ContactServiceNhaXuatban;

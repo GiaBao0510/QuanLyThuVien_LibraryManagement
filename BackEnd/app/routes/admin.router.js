@@ -26,7 +26,7 @@ router.route('/add/reader/').post(docgia.addReader);
 //Thêm số lượng cho sách dựa trên id và số lượng
 
     // --------- List (Liệt kê thông tin)--------
-//Danh sách sách
+//Danh sách sáchc
 router.route('/books').get(sach.listBook);
 
 //Danh sách đọc giả
@@ -111,10 +111,31 @@ router.route('/updatestatebook/:stt').put(sach.UpdateStateBook);
 //3. Lấy số lượng bản sách dựa trên tình trạng
 router.route("/numberofbookstates/:stt").get(sach.CountTheNumberOfBookStates)
 
+//4.Liệt kê các đọc giả chưa trả sách
+router.route('/informationaboutborrowed/').get(sach.ListInformationAboutBorrowedBooks);
+
+//5. Lấy số lượng sách
+router.route('/totalnumberofbooks/').get(sach.NumberOfBook);
+
+//6. Lấy số lượng đọc giả
+router.route('/totalnumberofreaders/').get(docgia.NumberOfReader);
+
+//7. Lấy tổng số lượng sách
+router.route('/entirenumberofbooksinthelibrary/').get(sach.TheEntireNumberOfBooksInTheLibrary);
+
+//8. Lấy số lượng nhà xuât bản
+router.route('/totalnumberofpublisher/').get(nhaxuatban.NumberOfpublishers);
+
+//9. Lấy số lượng tác giả
+router.route('/totalnumberofauthor/').get(tacgia.NumberOfAuthors);
+
+
     // ---- Truy vấn (admin)  ----
 //1. Thêm số lượng sách dựa trên ID sách
 router.route('/book/:id/quantity/:num').get(sach.addNumberOfBook);
 
-    //Liệt kê các đọc giả chưa trả sách
+//6. Lấy số lượng nhân viên
+router.route('/totalnumberofemployees/').get(nhanvien.NumberOfEmployee);
+
     //Liệt kê các đọc giả mượn sách quá hạn
 module.exports = router;

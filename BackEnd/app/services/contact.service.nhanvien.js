@@ -1,12 +1,11 @@
 const { ObjectId } = require('mongodb');
-
+var bcrypt = require('bcrypt');
 class ContactServiceNhanVien{
     constructor(client){
         this.Contact = client.db().collection('NhanVien'); //Kết nối đến bảng nhân viên
+        this.TaiKhoan = client.db().collection('TaiKhoan');
+        this.DocGia = client.db().collection('DocGia');
     }
-
-    //Kiểm tra IDcó tồn tại hay chưa [Nhân viên]
-    
 
     //1.Lấy ID cuối cùng rồi tạo ra ID mới dựa trên ID gần nhất [Nhân viên]
     async newID_nhanvien(){
@@ -17,6 +16,15 @@ class ContactServiceNhanVien{
 
     //1.Thêm nhân viên. Khi Tạo thông tin nhân viên
     async themNhanVien(payload){
+        //Tìm thử email Trên DocGia Và nhân viên có tồn tại hay chưa nếu tồn tại thì tạo ngược lại thì không thể tạo
+        let TimEmailUser =  await this.DocGia.findOne({Email: payload.Email});
+        let TimEmailStaff = await this.Contact.findOne({Email: payload.Email});
+
+        //Đã tồn tại tài khoản
+        if(TimEmailUser || TimEmailStaff){
+            return false;
+        }
+
         const newID =  await this.newID_nhanvien()
         const input = {
             idNhanVien: newID,
@@ -27,8 +35,21 @@ class ContactServiceNhanVien{
             Email: payload.Email,
             DiaChi: payload.DiaChi
         };
-        const result = await this.Contact.insertOne(input);
-        return result.value;
+
+        //Băm mật khẩu
+        let saltRounds = 10;
+        let salt = await bcrypt.genSalt(saltRounds);    //Việc sử dụng salt khi băm mật khẩu giúp tăng cường bảo mật. Salt là một chuỗi ký tự ngẫu nhiên được thêm vào mật khẩu trước khi băm.
+        let PW = await bcrypt.hash(payload.password, salt);
+
+        const account = {
+            account: payload.Email,
+            password: PW,
+            role: 1
+        }
+
+        await this.Contact.insertOne(input);
+        await this.TaiKhoan.insertOne(account);
+        return true;
     }
 
     //2.Tìm thông tin nhân viên dựa trên ID
@@ -67,6 +88,13 @@ class ContactServiceNhanVien{
     async TimThongTinHoTenNhanVien(name){
         const result = await this.Contact.findOne({hoTen:name});
         return result;
+    }
+
+    //8.Lấy số lượng nhân viên
+    async SoLuongNhanVien(){
+        let laySoluong = await this.Contact.find({});
+        laySoluong = await laySoluong.toArray();
+        return laySoluong.length;
     }
 }
 

@@ -11,22 +11,31 @@
 </script>
 
 <template>
-  <div>
-    <!--Header-->
-    <AppHeader/>
 
+    <!--Header-->
+  <header>
+    <AppHeader/>
+  </header>
+    
     <!--Main-->
-    <main>
-      <router-view/>
-    </main>
+  <main>
+    <router-view/>
+  </main>
 
     <!--Footer-->
+  <footer>
     <AppFooter/>
-    
-  </div>
-  
+  </footer>
 </template>
 
 <style>
-
+  header{
+    display: block;
+  }
+  main{
+    display: block;
+  }
+  footer{
+    display: block;
+  }
 </style>

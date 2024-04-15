@@ -13,11 +13,28 @@ exports.addReader = async(req, res, next) =>{
     try{
         const CSDocGia = new ContactServiceDocGia(MongoDB.client);
         const document = await CSDocGia.themDocGia(req.body);
-        return res.send(document);  //Trả về thông tin từ phía máy khách đã gửi
+        if(document == true){
+            return res.status(200).send({message: "Tạo tài khoản thành công"});
+        }
+        return res.status(401).send({message: "Email đã tồn tại hoặc lỗi"});
     }catch(error){
         return next( new ApiError(500, "Mot loi xuat hien khi dang them thong tin doc gia") );
     }
 };
+
+//2. Đăng nhập
+exports.Login = async (req, res, next) => {
+    try{
+        const CSDocGia = new ContactServiceDocGia(MongoDB.client);
+        const role = await CSDocGia.DangNhap(req.body);
+        if(role === false){
+            return res.status(401).send({message: "Mật khẩu sai hoặc tài khoản không tồn tại"});
+        }
+        return res.status(200).json({role: role});
+    }catch(error){
+        return next( new ApiError(500, `Mot loi xuat hien khi dang nhap xuat hien ben server - ${error.message}`) );
+    }
+}
 
     //Xử lý yêu cầu HTTP GET
 //1. Lấy danh sách đọc giả
@@ -65,6 +82,18 @@ exports.readerName = async(req, res, next) =>{
         return next(new ApiError(500, "Loi .Khi tim ho ten doc gia"));
     }
 };
+
+//4. Lấy số lượng đọc giả
+exports.NumberOfReader = async(req, res, next) =>{
+    try{
+        const CSDocGia = new ContactServiceDocGia(MongoDB.client);
+        const soLuong = await CSDocGia.SoLuongDocGia();
+        return res.json(soLuong);
+    }catch(error){
+        return next(new ApiError( 500, "Loi lay so luong doc gia"));
+    }
+}
+
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin đọc giả dựa trên ID
 exports.updateReaderInformation = async(req, res, next) => {

@@ -13,7 +13,10 @@ exports.addStaff = async(req, res, next) =>{
     try{
         const CSnhanvien = new ContactServiceNhanVien(MongoDB.client);
         const document = await CSnhanvien.themNhanVien(req.body);
-        return res.send(document);  //Trả về thông tin từ phía máy khách đã gửi
+        if(document == true){
+            return res.send({message: "Tạo tài khoản thành công"});
+        }
+        return res.send({message: "Email đã tồn tại hoặc lỗi"});
     }catch(error){
         return next( new ApiError(500, "Mot loi xuat hien khi dang them thong tin nhan vien") );
     }
@@ -61,6 +64,17 @@ exports.employeeName = async(req, res, next) =>{
         return next(new ApiError(500, "Loi .Khi tim ho ten nhan vien"));
     }
 };
+
+//4.Lấy số lượng nhân viên
+exports.NumberOfEmployee = async(req, res, next) =>{
+    try{
+        const CSnhanvien = new ContactServiceNhanVien(MongoDB.client);
+        const soLuong = await CSnhanvien.SoLuongNhanVien();
+        return res.json(soLuong);
+    }catch(error){
+        return next(new ApiError( 500, "Loi lay so luong nhan vien"));
+    }
+}
 
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin nhân viên dựa trên ID

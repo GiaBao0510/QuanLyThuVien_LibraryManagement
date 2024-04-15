@@ -1,15 +1,18 @@
+<script>
+
+</script>
+
 <template>
-    <header>
         <div class="gocPhai">
             <nav>
-                <router-link :to="{ name: 'Register'}" class="NutCoiTaiKhoan">
+                <router-link to="/dangky" class="NutCoiTaiKhoan">
                     Đăng ký
                 </router-link>
                 <span>/</span>
-                <router-link :to="{ name: 'Longin'}" class="NutCoiTaiKhoan">
+                <router-link to="/Login" class="NutCoiTaiKhoan">
                     Đăng nhập 
                 </router-link>
-                <router-link :to=" {name: 'Register' }" class="NutCoiTaiKhoan">
+                <router-link to=" /Login" class="NutCoiTaiKhoan">
                     Đăng xuất
                 </router-link>
             </nav>
@@ -21,12 +24,6 @@
                         <a href="/"> Library</a>
                     </h1>
                 </div>
-                <div class="search_header">
-                    <input type="text" placeholder="Nhập tên sách cần tìm" class="ThanhTimKiem"/>
-                    <button class="nutSearch ">
-                        <i class="fa-solid fa-magnifying-glass "></i>
-                    </button>
-                </div>
                 <div class="nutUser_header">
                     <p class="iconUser">
                         <i class="fa-solid fa-user"></i>
@@ -34,7 +31,6 @@
                 </div>
             </div>
         </div>
-    </header>
 </template>
 <style>
     .PhanDau{
@@ -47,7 +43,7 @@
     .header{
         display: grid;
         grid-template-areas: 
-        "tieude search search nutKiemtra";
+        "tieude tieude  nutKiemtra";
     }
     .TieuDe_header{
         margin-left: 5vh;
@@ -56,16 +52,12 @@
         font-size: 1.15em;
         font-weight: 700;
         font-family: Arial ;
-        color: rgb(14, 155, 14);
-    }
-    .search_header{
-        grid: "search";
-        margin-left: 5vh;
+        color: rgb(20, 56, 218);
     }
     .nutUser_header{
         grid: "nutKiemtra";
         margin-left: 5vh;
-        text-align: left;
+        text-align: end;
     }
     .iconUser{
         color: azure;
@@ -75,7 +67,7 @@
         padding: 8px;
     }
     .fa-user:hover{
-        background-color: rgb(14, 155, 14);
+        background-color: rgb(32, 29, 214);
         padding: 8px;
         border-radius: 100%;
         cursor: pointer;
@@ -92,23 +84,5 @@
         display: block;
         width: 100vw;
         text-align: end;
-    }
-    .nutSearch{
-        color: aliceblue;
-        background-color: limegreen;
-        width: 6.5vh;
-        height: 5vh;
-        text-align: center;
-        justify-content: center;
-        margin: 1vh;
-    }
-    .nutSearch:hover{
-        background-color: rgb(14, 155, 14);
-    }
-    .ThanhTimKiem{
-        width: 30vw;
-        height: 5vh;
-        border: 2px solid rgb(66, 190, 66);
-        border-radius: 5px;
     }
 </style>

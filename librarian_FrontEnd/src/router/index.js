@@ -3,13 +3,18 @@ import NotFound from "@/views/NotFound.vue";
 import home from "@/views/home.vue";
 import login from "@/views/login.vue";
 import rigister from "@/views/rigister.vue";
+import DangKy from "@/views/DangKy.vue";
+import homeAdmin from "@/viewsAdmin/home.vue";
 
 const routes = [
+    //-----------------------------------------------------
+        //User
     //Home
     {
         path: "/",
         name: "Home",
         component: home,
+        alias: '/trangchu'
     },
 
     //Đường dẫn không hợp lệ
@@ -31,8 +36,22 @@ const routes = [
         path:"/register",
         name:"Register",
         component: rigister,
-    }
+    },
 
+    //Đăng ký tài khoản
+    {
+        path:"/dangky",
+        name:"dangky",
+        component: DangKy,
+    },
+
+    //-----------------------------------------------------
+        //Admin
+    {
+        path:"/adminhome",
+        name:"AdminHome",
+        component: homeAdmin,
+    },
 ];
 
 const router = createRouter({
