@@ -4,10 +4,10 @@ import createApiClient from './api.service';
 class UserRights{
 
     //0.Mặc định thông tin này là vào phần người dùng có thể chưa đăng ký hoặc đăng nhập
-    constructor(baseURL = "http://localhost:3000/user"){
+    constructor(baseURL = "http://localhost:3001/user"){
         this.api = createApiClient(baseURL);
     }
-    //1.Lấy tất cả sách
+    //1.Lấy tất cả sách 
     async AllBooks(){
         return (await this.api.get('/books')).data;
     }

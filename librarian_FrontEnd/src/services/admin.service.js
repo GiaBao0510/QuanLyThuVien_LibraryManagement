@@ -4,7 +4,7 @@ import createApiClient from './api.service';
 class AdminRights{
 
     //0. Mặc định
-    constructor(baseURL = "/admin"){
+    constructor(baseURL = "http://localhost:3001/admin"){
         this.api = createApiClient(baseURL);
     }
 
@@ -20,17 +20,17 @@ class AdminRights{
     }
 
     //1.3 Thêm tác giả
-    async AddBook(data){
+    async AddAuthor(data){
         return ( await this.api.post('/add/author/',data) ).data;
     }
 
     //1.4 Thêm nhà xuất bản
-    async AddBook(data){
+    async AddPublisher(data){
         return ( await this.api.post('/add/publisher/',data) ).data;
     }
 
     //1.5 Thêm đọc giả
-    async AddBook(data){
+    async AddReader(data){
         return ( await this.api.post('/add/reader/',data) ).data;
     }
 
@@ -58,6 +58,16 @@ class AdminRights{
     //2.5 Danh sách nhân viên
     async AllEmployee(){
         return (await this.api.get('/Employees')).data;
+    }
+
+    //2.6 DAnh sách thể loại sách
+    async AllTypeBook(){
+        return (await this.api.get('/Employees')).data;
+    }
+
+    //2.7 DAnh sách sách đã mượn
+    async AllUnpaidBooks(){
+        return (await this.api.get('/informationaboutborrowed')).data;
     }
 
         //Tìm đối tượng dựa trên ID
@@ -161,6 +171,52 @@ class AdminRights{
     //5.4 Thêm số lượng sách dựa trên ID sách
     async AbbNumberOfBooks(id, number){
         return (await this.api.get(`/book/${id}/quantity/${number}`)).data;
+    }
+
+    //5.5 Kiêm tra bản sách đã mượn dựa trên ID
+    async CheckBorrowedBook(id){
+        return (await this.api.get(`/checkborrowedbooks/${id}`)).data;
+    }
+
+    //5.6 cập nhật trả sách
+    async ConfirmTheBookReturned(soBan){
+        return (await this.api.put(`/booksreturned/${soBan}`)).data;
+    }
+
+        //6. Số lượng
+    //6.1 Tổng số lượng sách
+    async TotalNumberOfBooks(){
+        return (await this.api.get('/totalnumberofbooks/')).data;
+    }
+
+    //6.2 Tổng số đọc giả
+    async TotalNumberOfReaders(){
+        return (await this.api.get('/totalnumberofreaders/')).data;
+    }
+
+    //6.3 Lấy tổng số lượng sách
+    async EntireNumberOfBooksInTheLibrary(){
+        return (await this.api.get('/entirenumberofbooksinthelibrary/')).data;
+    }
+
+    //6.4 Lấy tổng số lượng nhà xuất bản
+    async TotalNumberOfPublisher(){
+        return (await this.api.get('/totalnumberofpublisher/')).data;
+    }
+
+    //6.5 Lấy tổng số tác giả
+    async TotalNumberofAuthor(){
+        return (await this.api.get('/totalnumberofpublisher/')).data;
+    }
+
+    //6.6 Lấy số lượng sách đã mượn
+    async NumberOfBooksBorrowed(){
+        return (await this.api.get('/numberofbooksborrowed/')).data;
+    }
+
+    //6.7 Lấy số lượng nhân viên
+    async TotalNumberofEmployees(){
+        return (await this.api.get('/totalnumberofemployees/')).data;
     }
 }
 

@@ -157,6 +157,47 @@ exports.TheEntireNumberOfBooksInTheLibrary = async(req, res, next) =>{
     }
 }
 
+//10. Lấy số lượng bản sách đã mượn
+exports.NumberOfBooksBorrowed = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        const document = await CSSach.DemSoLuongSachDuaTrenTinhTrang(1);
+        if(!document || document == false){
+            return next(new ApiError(400,"STT ban sach khong ton tai"));
+        }
+
+        if(document){
+            return res.json(document);
+        }else{
+            return res.sendStatus(404);
+        }
+    }catch(error){
+        return next(new ApiError(500, `Loi .Khi tim STT ban sach: ${req.params.stt} - ${error.message}`));
+    }
+}
+
+//11. Lấy danh sách thể loại sách
+exports.listTypeBook = async(req, res, next) =>{
+    let documents = [];
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        documents = await CSSach.DanhSachTheLoaiSach();
+    }catch(error){
+        return next(new ApiError( 500, "Co mot loi xuat hien .Khi nhan mot danh sach sach."));
+    }
+    return res.send(documents);
+};
+
+//12. kiểm tra sách đã mượn hay chưa dụa trên ID sách
+exports.CheckBorrowedBook = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        document = await CSSach.KiemTraSachNayDaCoBanNaoMuonChua(req.params.id);
+        return res.send(document);
+    }catch(err){
+        return next(new ApiError( 500, "Co mot loi xuat hien .Khi kiem tra sách da muon."));
+    }
+}
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin sách dựa trên ID
 exports.updateBookInformation = async(req, res, next) => {
@@ -213,6 +254,20 @@ exports.UpdateStateBook = async(req, res, next) =>{
     }
 };
 
+//4. Cập nhật trả sách
+exports.booksReturned = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        const document = await CSSach.CapNhatTraSach(req.params.soBan);
+        
+        if(document == false){
+            return next(new ApiError(400, `Khong tin thay ban sach  - ${document}`));
+        }
+        return res.send({message: `Xac nhan tra sach thanh cong - ${document}`});
+    }catch(error){
+        return next(new ApiError(500, `Loi. Khi dang thuc hien xac nhan tra sach ${error.message}`));
+    }
+};
     //Xử lý yêu cầu HTTP DELETE
 //1. xóa thông tin sách dựa trên ID
 exports.deleteBook = async (req, res, next) => {

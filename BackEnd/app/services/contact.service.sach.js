@@ -7,6 +7,7 @@ class ContactServiceSach{
         this.TheoDoiMuonSach = client.db().collection('TheoDoiMuonSach');
         this.DocGia = client.db().collection('DocGia');
         this.TinhTrang = client.db().collection('TinhTrang');
+        this.TheLoai = client.db().collection('TheLoai');
     }
 
     //Kiểm tra IDcó tồn tại hay chưa [Nhân viên]
@@ -56,9 +57,56 @@ class ContactServiceSach{
 
     //5. Danh sách nhân viên
     async DanhSachSach(){
-        const response = await this.Contact.find({});
-        const result = await response.toArray();
-        return result;
+        let BoSach = await this.Contact.aggregate([
+            {
+                $lookup:{
+                    from:"TheLoai",
+                    localField: "idTheLoai",
+                    foreignField:"idTheLoai",
+                    as:"TheLoaiSach"
+                }
+            },{
+                $unwind: "$TheLoaiSach"
+            },
+            {
+                $lookup:{
+                    from:"NhaXuatBan",
+                    localField: "idNXB",
+                    foreignField:"idNXB",
+                    as:"NhaXuatBanSach"
+                }
+            },{
+                $unwind: "$NhaXuatBanSach"
+            },
+            {
+                $lookup:{
+                    from:"TacGia",
+                    localField: "IDtacgia",
+                    foreignField:"IDtacgia",
+                    as:"TacGiaSach"
+                }
+            },{
+                $unwind: "$TacGiaSach"
+            },
+            {
+                $project:{
+                    _id:0,
+                    idSach: "$idSach",
+                    Sach: "$tenSach",
+                    MoTa: "$MoTa",
+                    namXuatBan: "$namXuatBan" ,
+                    phi: "$phi",
+                    idTheLoai: "$idTheLoai",
+                    idNXB: "$idNXB",
+                    IDtacgia: "$IDtacgia",
+                    hinh: "$hinh",
+                    TheLoai: "$TheLoaiSach.tenTheLoai",
+                    NhaXuatBan: "$NhaXuatBanSach.tenNXB",
+                    TacGia: "$TacGiaSach.hoTen"
+                }
+            }
+        ]).toArray();
+        return BoSach;
     }
 
     //6. Xóa tất cả nhân viên
@@ -226,7 +274,7 @@ class ContactServiceSach{
         }
 
         //DDk: Kiểm tra bản sách đó có người mượn hay chưa
-        let kiemTraMuonBanSach = await this
+        //let kiemTraMuonBanSach = await this
 
         const response = await this.TheoDoiMuonSach.findOneAndUpdate(
             {Ban: Ban },
@@ -292,10 +340,11 @@ class ContactServiceSach{
                     Ban: "$TheoDoiChiTietSach.Ban",
                     hoTen: "$TheoDoiDocGia.hoTen",
                     idDocGia: "$TheoDoiDocGia.idDocGia",
+                    ngayMuon: "$ngayMuon",
+                    ngayTra: "$ngayTra",
                     idSach: "$TheoDoiSach.idSach",
-                    ngayMuon: "$TheoDoiSach.ngayMuon",
-                    ngayTra: "$TheoDoiSach.ngayTra",
-                    _id:0
+                    
+                    _id:0,
                 }
             }
     
@@ -316,6 +365,69 @@ class ContactServiceSach{
         let getSoluong = await this.ChiTietSach.find({});
         getSoluong = await getSoluong.toArray();
         return getSoluong.length;
+    }
+
+    //16. Lấy danh sách thể loại sách
+    async DanhSachTheLoaiSach(){
+        const response = await this.TheLoai.find({});
+        const result = await response.toArray();
+        return result;
+    }
+
+    //17. kiểm tra xem sách này có bản nào đã mượn hay chưa dựa trên  ID sách
+    async KiemTraSachNayDaCoBanNaoMuonChua(id){
+        id = parseInt(id);
+        let checkBorrow = await this.ChiTietSach.aggregate([
+            {
+                $lookup:{
+                    from:"TheoDoiMuonSach",
+                    localField: "Ban",
+                    foreignField:"Ban",
+                    as:"TheoDoiChiTietSach"
+                }
+            },{
+                $unwind: "$TheoDoiChiTietSach",
+            },
+            {
+                $match: {
+                    idSach: id,
+                    "TheoDoiChiTietSach.STT":1
+                }
+            },
+            {
+                $project:{
+                    _id:0,
+                    idSach:id,
+                    Ban: "$TheoDoiChiTietSach.Ban"
+                }
+            }
+        ]).toArray();
+        return (checkBorrow.length > 0) ? true:false;
+    }
+
+    //18. xác nhận trả sách
+    async CapNhatTraSach(soBan){
+        let LaysoBan = parseInt(soBan);
+        const input={
+            STT: 0,
+            ngayMuon: null,
+            ngayTra: null,
+            idDocGia:null
+        };
+
+        //Kiểm tra ban sách có tồn tại không
+        let TimSoBanSach = await this.TheoDoiMuonSach.findOne({Ban: LaysoBan});
+        if(!TimSoBanSach){
+            return false; 
+        }
+
+        //Thục hiện trả
+        await this.TheoDoiMuonSach.findOneAndUpdate(
+            {Ban: LaysoBan},
+            {$set: input},
+            {returnDocument: "after"}
+        );
+        return true; 
     }
 
     //8. Lấy tổng số lượng sách dựa trên Tên sách

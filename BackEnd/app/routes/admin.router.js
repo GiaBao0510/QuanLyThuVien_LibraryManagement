@@ -41,6 +41,9 @@ router.route('/Publishers').get(nhaxuatban.listPublishingCompany);
 //Danh sách nhân viên
 router.route('/Employees').get(nhanvien.listStaff);
 
+//Danh sách thể loại sách
+router.route('/TypeBooks').get(sach.listTypeBook);
+
     // --------- ID (Liệt kê, cập nhật và xóa thông tin cụ thể)------------
 //Tìm ID sách
 router.route('/book/:id')
@@ -129,6 +132,10 @@ router.route('/totalnumberofpublisher/').get(nhaxuatban.NumberOfpublishers);
 //9. Lấy số lượng tác giả
 router.route('/totalnumberofauthor/').get(tacgia.NumberOfAuthors);
 
+//10 .Lấy số lượng sách đã mượn//
+router.route("/numberofbooksborrowed/").get(sach.NumberOfBooksBorrowed)
+
+//11
 
     // ---- Truy vấn (admin)  ----
 //1. Thêm số lượng sách dựa trên ID sách
@@ -136,6 +143,12 @@ router.route('/book/:id/quantity/:num').get(sach.addNumberOfBook);
 
 //6. Lấy số lượng nhân viên
 router.route('/totalnumberofemployees/').get(nhanvien.NumberOfEmployee);
+
+//3. Kiểm tra bản sách đã mượn hay chưa dựa trên ID sách
+router.route('/checkborrowedbooks/:id').get(sach.CheckBorrowedBook);
+
+//4. Xác nhận trả sách
+router.route('/booksreturned/:soBan').put(sach.booksReturned);
 
     //Liệt kê các đọc giả mượn sách quá hạn
 module.exports = router;

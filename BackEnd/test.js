@@ -52,8 +52,8 @@ async function main(){
     // console.log( Date.parse(currentDay.toLocaleDateString()));
     // console.log( moment(Date.parse(limitDay.toLocaleDateString())).format("DD/MM/YYYY"))
 
-   console.log(await MuonSach("BaoOk",1) );
-
+   //console.log(await MuonSach("BaoOk",1) );
+    console.log(await LietKeSach())
    
 }
 
@@ -125,94 +125,63 @@ async function DoDai(){
     return dodai.length;
 }
 
-async function LayThongTinNhungBanSachDaMuon(){
-    let Ifor = await TheoDoiMuonSach.aggregate([
+//17. kiểm tra xem sách này có bản nào đã mượn hay chưa dựa trên  ID sách
+async function LietKeSach(){
+    let BoSach = await this.Sach.aggregate([
         {
             $lookup:{
-                from: "DocGia",
-                localField: "idDocGia",
-                foreignField: "idDocGia",
-                as:"TheoDoiDocGia",
+                from:"TheLoai",
+                localField: "idTheLoai",
+                foreignField:"idTheLoai",
+                as:"TheLoaiSach"
             }
-        },
-        {
-            $unwind: "$TheoDoiDocGia",
-        },
-        {
-            $lookup:{
-                from:"ChiTietSach",
-                localField: "Ban",
-                foreignField: "Ban",
-                as:"TheoDoiChiTietSach",
-            }
-        },
-        {
-            $unwind:"$TheoDoiChiTietSach",
+        },{
+            $unwind: "$TheLoaiSach"
         },
         {
             $lookup:{
-                from: "Sach",
-                localField: "TheoDoiChiTietSach.idSach",
-                foreignField: "idSach",
-                as:"TheoDoiSach",
+                from:"NhaXuatBan",
+                localField: "idNXB",
+                foreignField:"idNXB",
+                as:"NhaXuatBanSach"
             }
+        },{
+            $unwind: "$NhaXuatBanSach"
         },
         {
-            $unwind:"$TheoDoiSach",
+            $lookup:{
+                from:"TacGia",
+                localField: "IDtacgia",
+                foreignField:"IDtacgia",
+                as:"TacGiaSach"
+            }
+        },{
+            $unwind: "$TacGiaSach"
         },
         {
             $project:{
-                Sach: "$TheoDoiSach.tenSach",
-                Ban: "$TheoDoiChiTietSach.Ban",
-                hoTen: "$TheoDoiDocGia.hoTen",
-                idDocGia: "$TheoDoiDocGia.idDocGia",
-                idSach: "$TheoDoiSach.idSach",
-                ngayMuon: "$TheoDoiSach.ngayMuon",
-                ngayTra: "$TheoDoiSach.ngayTra",
-                _id:0
+                _id:0,
+                idSach: "$idSach",
+                Sach: "$tenSach",
+                MoTa: "$MoTa",
+                namXuatBan: "$namXuatBan" ,
+                phi: "$phi",
+                idTheLoai: "$idTheLoai",
+                idNXB: "$idNXB",
+                IDtacgia: "$IDtacgia",
+                hinh: "$hinh",
+                TheLoai: "$TheLoaiSach.tenTheLoai",
+                NhaXuatBan: "$NhaXuatBanSach.tenNXB",
+                TacGia: "$TacGiaSach.hoTen"
             }
         }
-
     ]).toArray();
-    
-    return Ifor;
+    return BoSach;
 }
 
 
 
-async function MuonSach(iddocgia, idsach){
 
-    //Kiểm tra Id sách có tồn tại hay chua
-    let BanChuaMuon = -1;
-    let TimSach = await Sach.findOne({idSach: idsach});
-    if(!TimSach){
-        return false;
-    }
-    
-    //Tìm bản sách dựa trên IDsach trong bảng ChiTietSach
-    let timBanSach = await ChiTietSach.find({idSach: idsach}, {_id:0, Ban:1, idSach:0} ).toArray();
-    timBanSach = await timBanSach.map(item => item.Ban);
-
-    console.log(timBanSach);
-    console.log("-----------------------");
-    let find = 0;
-    for (let i =0; i < timBanSach.length; i++){
-        console.log(timBanSach[i]);
-        //TÌm kiếm só thứ tự sách chưa mượn đầu tiên
-        const timBanChuaMuon = await TheoDoiMuonSach.findOne({Ban:timBanSach[i], STT:0 });
-        console.log(timBanChuaMuon);
-        if(timBanChuaMuon != null){
-            BanChuaMuon = timBanSach[i];
-            break;
-        }
-    }
-    console.log("-------------KQ----------");
-    //Nếu không tìm thấy
-    if(find == 0){
-        return false;
-    }
-    return BanChuaMuon;
-}
 
 
 
