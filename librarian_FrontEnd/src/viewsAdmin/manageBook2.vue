@@ -101,10 +101,10 @@ export default {
         <div class="">
             <div class="BangLietKe">
                 <BookList 
-                class="BangLietKeSach"
-                v-if="filterBookCount > 0"
-                :books="books"
-                v-model:activeIndex="activeIndex"
+                    class="BangLietKeSach"
+                    v-if="filterBookCount > 0"
+                    :books="books"
+                    v-model:activeIndex="activeIndex"
                 />
                 <p v-else> Không có quyển sách nào</p>
             </div>

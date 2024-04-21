@@ -124,7 +124,7 @@
 <style>
     .ThayDoiKichCoAnh{
         width: 15vw;
-        height: 25vh;
+        height: 35vh;
     }
     .TieuDeCuonSach{
         font-family: Gill Sans, Verdana;

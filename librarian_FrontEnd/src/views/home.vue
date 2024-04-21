@@ -3,16 +3,20 @@
     import BookDetail from './BookCard.vue';
     import Search from './searchBook.vue';
     import userService from '@/services/user.service';
+    import ListOfBooksToBorrow from './ListOfBooksToBorrow.vue';
 
     export default{
         components:{
-            BookList,BookDetail,Search
+            BookList,BookDetail,Search,ListOfBooksToBorrow
         },
         data(){
             return{
                 books:[],
                 activeIndex: - 1,   //Chỉ mục liên lạc mà người dùng đã chọn và hiển thị trên bookCard
                 searchText: "",
+                DangDangNhap:0,
+                MucHienThi:0,
+                ID:-1,
             };
         },
         watch:{
@@ -23,24 +27,25 @@
         },
         computed:{
             //Chuyển từng đối tượng thành chuỗi để tiện tìm
-        bookString(){
-            return this.books.map((book) => {
-                const {idSach, tenSach} = book;
-                return [idSach, tenSach].join("");
-            });
-        },
-        //Lọc thông tin cần tìm
-        filteredBooks(){
-            if(!this.searchText) return this.books;
-            return this.books.filter( (_book, index) => this.bookString[index].includes(this.searchText)); 
-        },
-        activeBook(){
-            if(this.activeIndex < 0) return null;
-            return this.filteredBooks[this.activeIndex];
-        },
-        filterBookCount(){
-            return this.filteredBooks.length;
-        }
+            bookString(){
+                return this.books.map((book) => {
+                    const {idSach, tenSach} = book;
+                    return [idSach, tenSach].join("");
+                });
+            },
+            //Lọc thông tin cần tìm
+            filteredBooks(){
+                if(!this.searchText) return this.books;
+                return this.books.filter( (_book, index) => this.bookString[index].includes(this.searchText)); 
+            },
+            activeBook(){
+                if(this.activeIndex < 0) return null;
+                return this.filteredBooks[this.activeIndex];
+            },
+            filterBookCount(){
+                return this.filteredBooks.length;
+            },
+            
         }, 
         methods:{
             async retriveBook(){
@@ -55,9 +60,21 @@
                 this.retriveBook();
                 this.activeIndex = -1;
             },
+            KiemTraDangNhap(){
+                if(sessionStorage.getItem('role') && sessionStorage.getItem('email') && sessionStorage.getItem('id') ){
+                    this.DangDangNhap = 1;
+                    this.ID = sessionStorage.getItem('id');
+                }else{
+                    this.DangDangNhap = 0;
+                }
+            },
+            ChonMucHienThi(index){
+                this.MucHienThi = index;
+            }
         },
         mounted(){
             this.refreshList();
+            this.KiemTraDangNhap();
         }
     }
 </script>
@@ -65,13 +82,27 @@
 <template>
     <div class="GiaoDienNguoiDung">
         <div class="BoGocGiaoDien">
-            <h4 class="TieuDeThuVien">
-                Thư viện
-            </h4>
+            <div>
+                <button 
+                    type="button" 
+                    class="TieuDeThuVien" 
+                    @click="refreshList, ChonMucHienThi(0)"
+                > 
+                    Thư viện 
+                </button>
+                <button 
+                    @click="refreshList, ChonMucHienThi(1)"
+                    v-if="DangDangNhap>0"
+                    class="btn-primary shadow p-3 mb-5 rounded NutKiemTraDaMuonSach "
+                >
+                    <i class="fa-solid fa-book"></i>
+                    Đã mượn
+                </button>
+            </div>
             <div class="PhanThongTinTimKiem">
                 <Search v-model="searchText"/>
             </div>
-            <div class="BangThongTinSach">
+            <div class="BangThongTinSach" v-if="MucHienThi == 0">
                 <BookList
                     v-if="filterBookCount > 0"
                     :books="books"
@@ -79,8 +110,13 @@
                 />
                 <p v-else>Không có sách nào</p>
             </div>
+            <div class="BangThongTinSach" v-if="MucHienThi == 1 && ID != -1">
+                <ListOfBooksToBorrow
+                    :ID="this.ID"
+                />
+            </div>
             <div>
-                <div v-if="activeBook" class="KhungChiTiet">
+                <div v-if="activeBook" class="KhungChiTietNguoiDung">
                     <div class="TieuDeQuangLy container">
                         <div class="row">
                             <div class="col-10">
@@ -102,8 +138,8 @@
 
 <style>
     .GiaoDienNguoiDung{
-        width: 100vw;
-        height: 100vw;
+        width: auto;
+        height: auto;
         padding: 5vh 0vh 5vh 0vh;
         display: flex;
         justify-content: center;
@@ -129,9 +165,9 @@
         height: 120vh;
         overflow: hidden;
     }
-    .KhungChiTiet{
+    .KhungChiTietNguoiDung{
         display: block;
-        position: fixed;
+        position: relative;
         border: 1px solid gray;
         background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
         padding: 2vh;
@@ -146,5 +182,12 @@
     .TieuDeThuVien{
         font-weight: bold;
         font-size: 2.5em;
+    }
+    .NutKiemTraDaMuonSach{
+        margin-left: 5vw;
+        font-size: 1.2em;
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 2vh;
+        border-radius: 5px;
     }
 </style>

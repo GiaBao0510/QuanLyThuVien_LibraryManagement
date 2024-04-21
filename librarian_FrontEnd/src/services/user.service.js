@@ -55,6 +55,11 @@ class UserRights{
     async NumberOfBooks(id){
         return (await this.api.get(`/NumberOfBooks/${id}`)).data;
     }
+
+    //11. Lấy nhưng loại sách mà người dùng đã mượn
+    async TheUserBorrowedTheBooks(id){
+        return (await this.api.get(`/theuserborrowedthebook/${id}`)).data;
+    }
 }
 
 export default new UserRights();

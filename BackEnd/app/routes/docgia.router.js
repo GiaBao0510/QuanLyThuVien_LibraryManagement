@@ -43,6 +43,7 @@ router.route('/totalnumberofauthor/').get(tacgia.NumberOfAuthors);
 //11. Tổng số lượng sách dựa trên ID sach
 router.route('/NumberOfBooks/:id').get(sach.TotalNumberOfBook);
 
-//Báo cáo tình trạng sách
+//12. Liệt kê anh dách ngươi dùng đã mượn
+router.route('/theuserborrowedthebook/:id').get(sach.TheUserBorrowedTheBooks);
 
 module.exports = router;

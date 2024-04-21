@@ -1,0 +1,100 @@
+[{
+  "_id": {
+    "$oid": "65f149e3e1ad5a96b247d1dd"
+  },
+  "IDtacgia": 0,
+  "hoTen": "Vũ Trọng Phụng",
+  "gioiTinh": 1,
+  "ngaySinh": "20/10/1912",
+  "DiaChi": "làng Hảo, xã Liêu Xá, huyện Yên Mỹ"
+},
+{
+  "_id": {
+    "$oid": "65f149e3e1ad5a96b247d1de"
+  },
+  "IDtacgia": 1,
+  "hoTen": "Thạch Lam",
+  "gioiTinh": 1,
+  "ngaySinh": "20/10/1912",
+  "DiaChi": "làng Hảo, xã Liêu Xá, huyện Yên Mỹ"
+},
+{
+  "_id": {
+    "$oid": "65f149e3e1ad5a96b247d1df"
+  },
+  "IDtacgia": 2,
+  "hoTen": "Nam Cao",
+  "gioiTinh": 1,
+  "ngaySinh": " 29/10/1915 ",
+  "DiaChi": "xã Hòa Hậu, huyện Lý Nhân, tỉnh Hà Nam"
+},
+{
+  "_id": {
+    "$oid": "65f149e3e1ad5a96b247d1e0"
+  },
+  "IDtacgia": 3,
+  "hoTen": "Nguyễn Thị Hoàng",
+  "gioiTinh": 0,
+  "ngaySinh": " 11/12/1939",
+  "DiaChi": "Huế thuộc Liên bang Đông Dương."
+},
+{
+  "_id": {
+    "$oid": "65f149e3e1ad5a96b247d1e1"
+  },
+  "IDtacgia": 4,
+  "hoTen": "Nguyễn Huy Thiệp",
+  "gioiTinh": 1,
+  "ngaySinh": "29/4/1950",
+  "DiaChi": "xóm Cò, thôn Khương Hạ, xã Khương Đình, huyện Thanh Trì (nay là phường Khương Đình, quận Thanh Xuân), Hà Nội"
+},
+{
+  "_id": {
+    "$oid": "65f149e3e1ad5a96b247d1e2"
+  },
+  "IDtacgia": 5,
+  "hoTen": "Nguyễn Minh Châu",
+  "gioiTinh": 1,
+  "ngaySinh": "20/10/1930",
+  "DiaChi": "làng Thơi, xã Sơn Hải, huyện Quỳnh Lưu, tỉnh Nghệ An"
+},
+{
+  "_id": {
+    "$oid": "65f149e3e1ad5a96b247d1e3"
+  },
+  "IDtacgia": 6,
+  "hoTen": "Nguyễn Nhật Ánh",
+  "gioiTinh": 1,
+  "ngaySinh": "7/5/1955",
+  "DiaChi": "làng Đo Đo, xã Bình Quế, huyện Thăng Bình, tỉnh Quảng Nam"
+},
+{
+  "_id": {
+    "$oid": "65f149e3e1ad5a96b247d1e4"
+  },
+  "IDtacgia": 7,
+  "hoTen": "Nguyễn Ngọc Tư",
+  "gioiTinh": 0,
+  "ngaySinh": "1/1/1976",
+  "DiaChi": "xã Tân Duyệt, huyện Đầm Dơi, tỉnh Cà Mau trong"
+},
+{
+  "_id": {
+    "$oid": "660c21dc7926bbed12951eb8"
+  },
+  "IDtacgia": 9,
+  "hoTen": "Hàn Mặc Tử",
+  "gioiTinh": 1,
+  "ngaySinh": "22/09/1912",
+  "DiaChi": "Làng Lệ Mỹ, thị xã Đồng Hới (nay là phường Đồng Mỹ, thành phố Đồng Hới, tỉnh Quảng Bình)"
+},
+{
+  "_id": {
+    "$oid": "662144987aea62f4c4b7da88"
+  },
+  "IDtacgia": 10,
+  "hoTen": "Oda Eiichirō",
+  "gioiTinh": "1",
+  "ngaySinh": "1975-01-01",
+  "DiaChi": " thành phố Kumamoto, tỉnh Kumamoto)"
+}]

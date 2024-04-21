@@ -11,21 +11,23 @@
 </script>
 
 <template>
+  <div>
+        <!--Header-->
+    <header>
+      <AppHeader/>
+    </header>
+      
+      <!--Main-->
+    <main>
+      <router-view/>
+    </main>
 
-    <!--Header-->
-  <header>
-    <AppHeader/>
-  </header>
-    
-    <!--Main-->
-  <main>
-    <router-view/>
-  </main>
+      <!--Footer-->
+    <footer>
+      <AppFooter/>
+    </footer>
+  </div>
 
-    <!--Footer-->
-  <footer>
-    <AppFooter/>
-  </footer>
 </template>
 
 <style>

@@ -430,6 +430,52 @@ class ContactServiceSach{
         return true; 
     }
 
+    //19. Lấy thông tin sách mượn của người dùng
+    async NhungQuyenSachDaMuonNguoiDung(id) {
+        id = parseInt(id);
+        let ketQua = await this.TheoDoiMuonSach.aggregate([
+          {
+            $match: {
+              idDocGia: id,
+            },
+          },
+          {
+            $lookup: {
+              from: "ChiTietSach",
+              localField: "Ban",
+              foreignField: "Ban",
+              as: "TheoDoiChiTietSach",
+            },
+          },
+          {
+            $unwind: "$TheoDoiChiTietSach",
+          },
+          {
+            $lookup: {
+              from: "Sach",
+              localField: "TheoDoiChiTietSach.idSach",
+              foreignField: "idSach",
+              as: "TheoDoiSach",
+            },
+          },
+          {
+            $unwind: "$TheoDoiSach",
+          },
+          {
+            $project: {
+              _id: 0,
+              idDocGia: id,
+              Sach: "$TheoDoiSach.tenSach",
+              Ban: "$Ban",
+              ngayMuon: "$ngayMuon",
+              ngayTra: "$ngayTra",
+            },
+          },
+        ]);
+      
+        ketQua = await ketQua.toArray();
+        return ketQua;
+      }
     //8. Lấy tổng số lượng sách dựa trên Tên sách
     //9. Lấy tổng sơ lượng sách dựa trên ID tình trạng
     //9. Lấy tổng sơ lượng sách dựa trên Tên tình trạng

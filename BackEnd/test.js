@@ -53,7 +53,7 @@ async function main(){
     // console.log( moment(Date.parse(limitDay.toLocaleDateString())).format("DD/MM/YYYY"))
 
    //console.log(await MuonSach("BaoOk",1) );
-    console.log(await LietKeSach())
+    console.log(await NhungQuyenSachDaMuonNguoiDung(8))
    
 }
 
@@ -125,60 +125,11 @@ async function DoDai(){
     return dodai.length;
 }
 
-//17. kiểm tra xem sách này có bản nào đã mượn hay chưa dựa trên  ID sách
-async function LietKeSach(){
-    let BoSach = await this.Sach.aggregate([
-        {
-            $lookup:{
-                from:"TheLoai",
-                localField: "idTheLoai",
-                foreignField:"idTheLoai",
-                as:"TheLoaiSach"
-            }
-        },{
-            $unwind: "$TheLoaiSach"
-        },
-        {
-            $lookup:{
-                from:"NhaXuatBan",
-                localField: "idNXB",
-                foreignField:"idNXB",
-                as:"NhaXuatBanSach"
-            }
-        },{
-            $unwind: "$NhaXuatBanSach"
-        },
-        {
-            $lookup:{
-                from:"TacGia",
-                localField: "IDtacgia",
-                foreignField:"IDtacgia",
-                as:"TacGiaSach"
-            }
-        },{
-            $unwind: "$TacGiaSach"
-        },
-        {
-            $project:{
-                _id:0,
-                idSach: "$idSach",
-                Sach: "$tenSach",
-                MoTa: "$MoTa",
-                namXuatBan: "$namXuatBan" ,
-                phi: "$phi",
-                idTheLoai: "$idTheLoai",
-                idNXB: "$idNXB",
-                IDtacgia: "$IDtacgia",
-                hinh: "$hinh",
-                TheLoai: "$TheLoaiSach.tenTheLoai",
-                NhaXuatBan: "$NhaXuatBanSach.tenNXB",
-                TacGia: "$TacGiaSach.hoTen"
-            }
-        }
-    ]).toArray();
-    return BoSach;
+//Lấy thông tin sách mượn của người dùng
+async function NhungQuyenSachDaMuonNguoiDung(id){
+    let dodai =  await TheoDoiMuonSach.find({idDocGia: id}).toArray();
+    return dodai;
 }
-
 
 
 

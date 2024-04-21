@@ -1,0 +1,168 @@
+[{
+  "_id": {
+    "$oid": "65f93494cc7aa9443390b75e"
+  },
+  "idDocGia": 2,
+  "hoTen": "Đặng Thùy Trang",
+  "gioiTinh": 0,
+  "ngaySinh": "2002-03-17",
+  "SDT": "0949522905",
+  "Email": "dtt@gmail.com",
+  "DiaChi": "29/2A, đường Nhật Tảo, Phường Lê Bình, Quận Cái Răng, Cần Thơ"
+},
+{
+  "_id": {
+    "$oid": "65f93494cc7aa9443390b75f"
+  },
+  "idDocGia": 3,
+  "hoTen": "Hoàng Văn Thắng",
+  "gioiTinh": 1,
+  "ngaySinh": "2002-10-08",
+  "SDT": "0949234388",
+  "Email": "hvt@gmail.com",
+  "DiaChi": "Thửa đất số 102, tờ bản đồ số 34, đường Thái Thị Hạnh, khu v, Phường Thới Long, Quận Ô Môn, Cần Thơ"
+},
+{
+  "_id": {
+    "$oid": "65f93494cc7aa9443390b760"
+  },
+  "idDocGia": 4,
+  "hoTen": "Nguyễn Xuân Bình",
+  "gioiTinh": 1,
+  "ngaySinh": "2002-05-27",
+  "SDT": "0912222798",
+  "Email": "nxb@gmail.com",
+  "DiaChi": "379, Đường Lê Bình, Phường Lê Bình, Quận Cái Răng, Cần Thơ"
+},
+{
+  "_id": {
+    "$oid": "65f93494cc7aa9443390b761"
+  },
+  "idDocGia": 5,
+  "hoTen": "Trần Hồng Oanh",
+  "gioiTinh": 0,
+  "ngaySinh": "2002-01-25",
+  "SDT": "0944747978",
+  "Email": "tho@gmail.com",
+  "DiaChi": "Số 10, đường 4A, KDC Hưng Phú 1, Phường Hưng Phú, Quận Cái Răng, Cần Thơ"
+},
+{
+  "_id": {
+    "$oid": "65f93494cc7aa9443390b762"
+  },
+  "idDocGia": 6,
+  "hoTen": "Trần Thị Dung",
+  "gioiTinh": 0,
+  "ngaySinh": "2002-12-15",
+  "SDT": "0914418539",
+  "Email": "ttd@gmail.com",
+  "DiaChi": "16/61 Cách Mạng Tháng Tám., Phường An Hòa, Quận Ninh Kiều, Cần Thơ"
+},
+{
+  "_id": {
+    "$oid": "660bc22acb82083685ac2a46"
+  },
+  "idDocGia": 7,
+  "hoTen": "Phạm Gia Bảo",
+  "gioiTinh": 0,
+  "ngaySinh": "2002-10-05",
+  "SDT": "0955367810",
+  "Email": "giabao11223344@gmail.com",
+  "DiaChi": "Q.Ninh Kiều,tp.Cần thơ"
+},
+{
+  "_id": {
+    "$oid": "661389756613c0405086ac8c"
+  },
+  "idDocGia": 1,
+  "hoTen": "Trần Lộc ĐỈnh",
+  "gioiTinh": 1,
+  "ngaySinh": "2002-04-05",
+  "SDT": "0849317625",
+  "Email": "tldinh@gmail.com",
+  "DiaChi": "đ.Nguyễn Văn Cừ, Q.Ninh Kiều, tp.Cần Thơ"
+},
+{
+  "_id": {
+    "$oid": "661389d06613c0405086ac8e"
+  },
+  "idDocGia": 8,
+  "hoTen": "Hồ Minh Trường",
+  "gioiTinh": 1,
+  "ngaySinh": "2002-07-05",
+  "SDT": "0849317625",
+  "Email": "hmtruong@gmail.com",
+  "DiaChi": "đ.Nguyễn Văn Cừ, Q.Ninh Kiều, tp.Cần Thơ"
+},
+{
+  "_id": {
+    "$oid": "66138a126613c0405086ac90"
+  },
+  "idDocGia": 9,
+  "hoTen": "Lê Hữu Đức",
+  "gioiTinh": 1,
+  "ngaySinh": "2002-10-29",
+  "SDT": "0849317625",
+  "Email": "lhduc@gmail.com",
+  "DiaChi": "đ.3/2, Q.Ninh Kiều, tp.Cần Thơ"
+},
+{
+  "_id": {
+    "$oid": "661a53c1e27d7738cd4335ba"
+  },
+  "idDocGia": 10,
+  "hoTen": "HieuThuTha",
+  "gioiTinh": "1",
+  "ngaySinh": "2024-03-07",
+  "SDT": "0839667851",
+  "Email": "hieithutha@gmail.com",
+  "DiaChi": "ninh kieu ,can tho"
+},
+{
+  "_id": {
+    "$oid": "661a7a2111c5405c83a9179a"
+  },
+  "idDocGia": 12,
+  "hoTen": "Đức lê",
+  "gioiTinh": "0",
+  "ngaySinh": "2002-06-26",
+  "SDT": "0845977368",
+  "Email": "duccong@gmail.com",
+  "DiaChi": "ninh kieu ,can tho"
+},
+{
+  "_id": {
+    "$oid": "661a7f4211c5405c83a9179c"
+  },
+  "idDocGia": 13,
+  "hoTen": "Đức lê",
+  "gioiTinh": "0",
+  "ngaySinh": "2024-04-13",
+  "SDT": "0839667851",
+  "Email": "hieithuthasfs@gmail.com",
+  "DiaChi": "ninh kieu ,can tho"
+},
+{
+  "_id": {
+    "$oid": "661a9fd711c5405c83a9179e"
+  },
+  "idDocGia": 14,
+  "hoTen": "HieuThuTha",
+  "gioiTinh": "1",
+  "ngaySinh": "2024-04-03",
+  "SDT": "0839667851",
+  "Email": "hieithutha1478@gmail.com",
+  "DiaChi": "ninh kieu ,can tho"
+},
+{
+  "_id": {
+    "$oid": "66213f8c7aea62f4c4b7da86"
+  },
+  "idDocGia": 14,
+  "hoTen": "kakashi",
+  "gioiTinh": "1",
+  "ngaySinh": "2024-04-18",
+  "SDT": "0958461325",
+  "Email": "kakashi1234@gmail.com",
+  "DiaChi": "ninh kieu ,can tho"
+}]

@@ -18,9 +18,13 @@
         methods:{
             //Thực hiện đăng xuất
             ThucHienDangXuat(){
+                sessionStorage.removeItem('email');
+                sessionStorage.removeItem('id');
+                sessionStorage.removeItem('role');
                 sessionStorage.clear();
                 console.log("Role:",Role,"ID: ",ID,"Email: ",Email);
                 this.$router.push('/');
+                location.reload();
             },
             ThucHienDangNhap(){
                 sessionStorage.clear();

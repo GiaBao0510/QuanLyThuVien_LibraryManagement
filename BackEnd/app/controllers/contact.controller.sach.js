@@ -198,6 +198,18 @@ exports.CheckBorrowedBook = async(req, res, next) =>{
         return next(new ApiError( 500, "Co mot loi xuat hien .Khi kiem tra sách da muon."));
     }
 }
+
+//13. Lấy những loại sách đã mượn dựa trên ID người dùng
+exports.TheUserBorrowedTheBooks = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        document = await CSSach.NhungQuyenSachDaMuonNguoiDung(req.params.id);
+        return res.send(document);
+    }catch(err){
+        return next(new ApiError( 500, `Co mot loi xuat hien .Khi kiem tra sách da muon dua tren ID nguoi dung. - ${err}`));
+    }
+}
+
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin sách dựa trên ID
 exports.updateBookInformation = async(req, res, next) => {
