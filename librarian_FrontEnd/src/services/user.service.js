@@ -60,6 +60,11 @@ class UserRights{
     async TheUserBorrowedTheBooks(id){
         return (await this.api.get(`/theuserborrowedthebook/${id}`)).data;
     }
+
+    //12 Lấy số lượng sách chưa mượn dựa trên ID sách
+    async TotalNumberOfBooksNotYetBorrowed(id){
+        return (await this.api.get(`/totalnumberofbooksnotyetborrowed/${id}`)).data;
+    }
 }
 
 export default new UserRights();

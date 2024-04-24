@@ -183,6 +183,11 @@ class AdminRights{
         return (await this.api.put(`/booksreturned/${soBan}`)).data;
     }
 
+    //5.7 Lấy số lượng sách chưa mượn dựa trên ID sách
+    async TotalNumberOfBooksNotYetBorrowed(id){
+        return (await this.api.get(`/totalnumberofbooksnotyetborrowed/${id}`)).data;
+    }
+
         //6. Số lượng
     //6.1 Tổng số lượng sách
     async TotalNumberOfBooks(){
@@ -218,6 +223,8 @@ class AdminRights{
     async TotalNumberofEmployees(){
         return (await this.api.get('/totalnumberofemployees/')).data;
     }
+
+    
 }
 
 export default new AdminRights();

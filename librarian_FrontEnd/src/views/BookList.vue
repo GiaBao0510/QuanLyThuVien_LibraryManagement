@@ -3,7 +3,7 @@
     import Swal from 'sweetalert2';
 
     //Kiêm tra da đang nhạp hay chua
-    let Email = sessionStorage.getItem('email'),
+    let Email = sessionStorage.getItem('email'), 
         Role = sessionStorage.getItem('role'),
         ID = sessionStorage.getItem('id');
     
@@ -36,7 +36,7 @@
             async LaySoLuongSach(id) {
                 let sl = 0;
                 try {
-                sl = await userService.NumberOfBooks(id);
+                sl = await userService.TotalNumberOfBooksNotYetBorrowed(id);
                 } catch (err) {
                 console.log(err);
                 }

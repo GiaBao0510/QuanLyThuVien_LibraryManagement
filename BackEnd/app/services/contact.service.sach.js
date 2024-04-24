@@ -476,6 +476,48 @@ class ContactServiceSach{
         ketQua = await ketQua.toArray();
         return ketQua;
       }
+
+    //20. Lấy tổng số lượng sách chưa mượn dựa trên ID sách
+    async TongSoLuongSachChuaMuon_ID(idsach){
+        idsach = parseInt(idsach);
+        const JoinData = await this.Contact.aggregate([
+        {
+            $lookup: {
+            from: "ChiTietSach",
+            localField: "idSach",
+            foreignField: "idSach",
+            as: "ChiTietQuyenSach",
+            },
+        },
+        { $unwind: "$ChiTietQuyenSach" },
+        {
+            $lookup: {
+            from: "TheoDoiMuonSach",
+            let: { ban: "$ChiTietQuyenSach.Ban" },
+            pipeline: [
+                { $match: { $expr: { $eq: ["$Ban", "$$ban"] }, STT: 0 } },
+                { $project: { _id: 0, Ban: 1, STT: 1 } },
+            ],
+            as: "ChiTietTheoDoi",
+            },
+        },
+        {
+            $match: {
+            idSach: idsach,
+            "ChiTietTheoDoi.STT": 0,
+            },
+        },
+        {
+            $project: {
+            tenSach: 1,
+            Ban: "$ChiTietQuyenSach.Ban",
+            STT: "$ChiTietTheoDoi.STT",
+            _id: 0,
+            },
+        },
+        ]).toArray();
+        return JoinData.length;
+    };  
     //8. Lấy tổng số lượng sách dựa trên Tên sách
     //9. Lấy tổng sơ lượng sách dựa trên ID tình trạng
     //9. Lấy tổng sơ lượng sách dựa trên Tên tình trạng

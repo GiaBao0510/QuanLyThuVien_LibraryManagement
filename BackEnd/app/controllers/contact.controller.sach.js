@@ -210,6 +210,16 @@ exports.TheUserBorrowedTheBooks = async(req, res, next) =>{
     }
 }
 
+//14. Lấy tổng số lượng sách chưa mượn dựa trên ID sách
+exports.TotalNumberOfBooksNotYetBorrowed = async(req, res, next) =>{
+    try{
+        const CSSach = new ContactServiceSach(MongoDB.client);
+        document = await CSSach.TongSoLuongSachChuaMuon_ID(req.params.id);
+        return res.json(document);
+    }catch(err){
+        return next(new ApiError( 500, `Co mot loi xuat hien .Khi lay so luong sách chua muon dua tren ID. - ${err}`));
+    }
+}
     //Xử lý yêu cầu HTTP PUT 
 //1. Cập nhật thông tin sách dựa trên ID
 exports.updateBookInformation = async(req, res, next) => {

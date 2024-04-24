@@ -46,4 +46,7 @@ router.route('/NumberOfBooks/:id').get(sach.TotalNumberOfBook);
 //12. Liệt kê anh dách ngươi dùng đã mượn
 router.route('/theuserborrowedthebook/:id').get(sach.TheUserBorrowedTheBooks);
 
+//13. Liệt kê sách chưa mượn dựa trên ID sách
+router.route('/totalnumberofbooksnotyetborrowed/:id').get(sach.TotalNumberOfBooksNotYetBorrowed);
+
 module.exports = router;

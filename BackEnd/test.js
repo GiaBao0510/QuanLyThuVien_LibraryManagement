@@ -53,7 +53,7 @@ async function main(){
     // console.log( moment(Date.parse(limitDay.toLocaleDateString())).format("DD/MM/YYYY"))
 
    //console.log(await MuonSach("BaoOk",1) );
-    console.log(await NhungQuyenSachDaMuonNguoiDung(8))
+    console.log(await SoLuongSachChuaMuon(1))
    
 }
 
@@ -126,11 +126,46 @@ async function DoDai(){
 }
 
 //Lấy thông tin sách mượn của người dùng
-async function NhungQuyenSachDaMuonNguoiDung(id){
-    let dodai =  await TheoDoiMuonSach.find({idDocGia: id}).toArray();
-    return dodai;
-}
-
+async function SoLuongSachChuaMuon(idsach) {
+    idsach = parseInt(idsach);
+    const JoinData = await Sach.aggregate([
+      {
+        $lookup: {
+          from: "ChiTietSach",
+          localField: "idSach",
+          foreignField: "idSach",
+          as: "ChiTietQuyenSach",
+        },
+      },
+      { $unwind: "$ChiTietQuyenSach" },
+      {
+        $lookup: {
+          from: "TheoDoiMuonSach",
+          let: { ban: "$ChiTietQuyenSach.Ban" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$Ban", "$$ban"] }, STT: 0 } },
+            { $project: { _id: 0, Ban: 1, STT: 1 } },
+          ],
+          as: "ChiTietTheoDoi",
+        },
+      },
+      {
+        $match: {
+          idSach: idsach,
+          "ChiTietTheoDoi.STT": 0,
+        },
+      },
+      {
+        $project: {
+          tenSach: 1,
+          Ban: "$ChiTietQuyenSach.Ban",
+          STT: "$ChiTietTheoDoi.STT",
+          _id: 0,
+        },
+      },
+    ]).toArray();
+    return JoinData.length;
+  }
 
 
 

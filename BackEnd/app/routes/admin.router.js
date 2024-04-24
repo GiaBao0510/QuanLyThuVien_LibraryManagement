@@ -135,7 +135,8 @@ router.route('/totalnumberofauthor/').get(tacgia.NumberOfAuthors);
 //10 .Lấy số lượng sách đã mượn//
 router.route("/numberofbooksborrowed/").get(sach.NumberOfBooksBorrowed)
 
-//11
+//11. Lấy số lườn sách chưa muonj dựa trên ID sách
+router.route('/totalnumberofbooksnotyetborrowed/:id').get(sach.TotalNumberOfBooksNotYetBorrowed);
 
     // ---- Truy vấn (admin)  ----
 //1. Thêm số lượng sách dựa trên ID sách

@@ -47,7 +47,6 @@
                             console.log("role:",  sessionStorage.getItem('role') )
                             window.location.pathname='/adminhome';
                             this.$router.push('/adminhome');
-                        
                         }
                         //Nhân viên
                         else if(nguoidung.role == "1"){
